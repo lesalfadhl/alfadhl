@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hubungi Admin - Les Alfadhl</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--hijau-tua:#2D5F3F;--hijau:#3E7B54;--hijau-muda:#7BAE7F;--krem:#F5EFE0;--krem-tua:#EADFC4;--putih:#FAFAF7;--teks:#2C3E2E;--emas:#C9A961;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{min-height:100vh;background:var(--putih);padding:40px 20px;color:var(--teks);}
+.wrap{max-width:600px;margin:0 auto;}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--hijau);text-decoration:none;font-size:13px;margin-bottom:20px;font-weight:600;}
+.header{text-align:center;margin-bottom:32px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));color:#fff;padding:36px 24px;border-radius:24px;box-shadow:0 12px 30px rgba(45,95,63,.2);}
+.header h1{font-family:'Amiri',serif;font-size:28px;margin-bottom:8px;}
+.header p{font-size:14px;opacity:.9;}
+.wa-box{background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(45,95,63,.08);margin-bottom:20px;text-align:center;border:2px solid #e8f3eb;}
+.wa-box .icon{font-size:42px;margin-bottom:8px;}
+.wa-box h3{color:var(--hijau-tua);margin-bottom:6px;font-size:17px;}
+.wa-box p{font-size:13px;color:#7a8a7d;margin-bottom:14px;}
+.btn-wa{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:#25D366;color:#fff;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;box-shadow:0 6px 18px rgba(37,211,102,.35);transition:.3s;}
+.btn-wa:hover{transform:translateY(-2px);}
+.or{text-align:center;color:#9aa79c;font-size:12px;margin:20px 0;position:relative;}
+.or::before,.or::after{content:'';position:absolute;top:50%;width:44%;height:1px;background:#e0e6e1;}
+.or::before{left:0;}.or::after{right:0;}
+.or span{background:var(--putih);padding:0 12px;position:relative;}
+.form-card{background:#fff;border-radius:20px;padding:28px 24px;box-shadow:0 4px 20px rgba(45,95,63,.08);}
+.form-card h3{color:var(--hijau-tua);font-size:18px;margin-bottom:6px;}
+.form-card > p{font-size:13px;color:#7a8a7d;margin-bottom:20px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--hijau-tua);margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:12px 14px;font-size:14px;border:2px solid #e0e6e1;border-radius:10px;
+  background:var(--putih);outline:none;transition:.3s;font-family:'Poppins',sans-serif;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--hijau-muda);background:#fff;box-shadow:0 0 0 4px rgba(123,174,127,.12);
+}
+.form-group textarea{resize:vertical;min-height:70px;}
+.checkbox-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;background:var(--krem);border-radius:10px;}
+.checkbox-item{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;padding:6px;}
+.checkbox-item input{width:16px;height:16px;accent-color:var(--hijau);}
+.btn-submit{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));color:#fff;font-weight:600;font-size:15px;cursor:pointer;transition:.3s;margin-top:8px;}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(45,95,63,.3);}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;}
+.alert{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:18px;display:none;}
+.alert.error{background:#fde8e8;color:#c0392b;border-left:4px solid #e74c3c;}
+.alert.success{background:#e5f4ea;color:#2D5F3F;border-left:4px solid var(--hijau-muda);}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media(max-width:480px){.checkbox-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a href="login.html" class="back">← Kembali ke Login</a>
+
+  <div class="header">
+    <h1>📱 Belum Punya Akun?</h1>
+    <p>Untuk mendapatkan No WA & sandi, silakan hubungi admin terlebih dahulu</p>
+  </div>
+
+  <div class="wa-box">
+    <div class="icon">💬</div>
+    <h3>WhatsApp Admin</h3>
+    <p>08952-9999-351</p>
+    <a href="https://wa.me/6289529999351?text=Assalamu'alaikum,%20saya%20ingin%20mendaftar%20Les%20Alfadhl.%20Mohon%20dibuatkan%20akun." 
+       target="_blank" class="btn-wa">Chat via WhatsApp</a>
+  </div>
+
+  <div class="or"><span>atau isi form berikut</span></div>
+
+  <div class="form-card">
+    <h3>Form Request Akun</h3>
+    <p>Admin akan mengirim akun dalam 1x24 jam</p>
+
+    <div id="alert" class="alert"></div>
+
+    <form id="reqForm">
+      <div class="form-group">
+        <label>Nama Wali *</label>
+        <input type="text" id="namaWali" required placeholder="Nama lengkap">
+      </div>
+
+      <div class="form-group">
+        <label>No WhatsApp Aktif *</label>
+        <input type="tel" id="noWA" required placeholder="08xxxxxxxxxx" pattern="[0-9]{10,15}">
+        <small style="font-size:11px;color:#999;">Nomor ini akan jadi username login Anda</small>
+      </div>
+
+      <div class="form-group">
+        <label>Nama Santri *</label>
+        <input type="text" id="namaSantri" required placeholder="Nama lengkap santri">
+      </div>
+
+      <div class="form-group">
+        <label>Mapel yang Diminati * (bisa lebih dari 1)</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item"><input type="checkbox" value="Bahasa Arab Dasar"> 📖 Bahasa Arab Dasar</label>
+          <label class="checkbox-item"><input type="checkbox" value="Tajwid"> 📗 Tajwid</label>
+          <label class="checkbox-item"><input type="checkbox" value="Tahsin"> 📘 Tahsin</label>
+          <label class="checkbox-item"><input type="checkbox" value="Hafalan"> 🧠 Hafalan</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Paket yang Diminati *</label>
+        <select id="paket" required>
+          <option value="">-- Pilih Paket --</option>
+          <option value="A">Paket A — Ahad s/d Kamis — Rp 300.000/bln</option>
+          <option value="B">Paket B — Senin s/d Rabu — Rp 150.000/bln</option>
+          <option value="C">Paket C — Jum'at & Sabtu — Rp 300.000/bln</option>
+          <option value="C">Paket D — Ahad & Kamis — Rp 100.000/bln</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Catatan (opsional)</label>
+        <textarea id="catatan" placeholder="Contoh: anak baru, mohon dibimbing dari awal"></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnSubmit">Kirim Permintaan Akun</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec'; // ⚠️ GANTI
+const form = document.getElementById('reqForm');
+const btnSubmit = document.getElementById('btnSubmit');
+const alertBox = document.getElementById('alert');
+
+function showAlert(msg, type = 'success') {
+  alertBox.textContent = msg;
+  alertBox.className = 'alert ' + type;
+  alertBox.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function formatWA(n) {
+  n = n.replace(/\D/g, '');
+  if (n.startsWith('0')) n = '62' + n.slice(1);
+  if (n.startsWith('8')) n = '62' + n;
+  return n;
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const mapelArr = Array.from(document.querySelectorAll('.checkbox-grid input:checked')).map(c => c.value);
+  if (mapelArr.length === 0) { showAlert('Pilih minimal 1 mapel', 'error'); return; }
+  
+  btnSubmit.disabled = true;
+  btnSubmit.innerHTML = '<span class="spinner"></span>Mengirim...';
+  
+  const payload = {
+    action: 'requestAkun',
+    namaWali: document.getElementById('namaWali').value.trim(),
+    noWA: formatWA(document.getElementById('noWA').value),
+    namaSantri: document.getElementById('namaSantri').value.trim(),
+    mapel: mapelArr.join(', '),
+    paket: document.getElementById('paket').value,
+    catatan: document.getElementById('catatan').value.trim()
+  };
+  
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    });
+    const result = await res.json();
+    if (result.success) {
+      showAlert('✅ Permintaan terkirim! Admin akan menghubungi Anda via WhatsApp dalam 1x24 jam.', 'success');
+      form.reset();
+    } else {
+      showAlert('❌ ' + (result.message || 'Gagal mengirim'), 'error');
+    }
+  } catch (err) {
+    showAlert('❌ Kesalahan jaringan: ' + err.message, 'error');
+  } finally {
+    btnSubmit.disabled = false;
+    btnSubmit.textContent = 'Kirim Permintaan Akun';
+  }
+});
+</script>
+
+</body>
+</html>

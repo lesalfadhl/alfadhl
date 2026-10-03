@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daftar Les - Les Alfadhl</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--hijau-tua:#2D5F3F;--hijau:#3E7B54;--hijau-muda:#7BAE7F;--krem:#F5EFE0;--krem-tua:#EADFC4;--putih:#FAFAF7;--teks:#2C3E2E;--emas:#C9A961;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;padding:20px;}
+.wrap{max-width:1100px;margin:0 auto;}
+
+.topbar{
+  background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
+  color:#fff;padding:16px 24px;border-radius:16px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  margin-bottom:20px;box-shadow:0 8px 24px rgba(45,95,63,.2);
+}
+.topbar .user-info{font-size:13px;}
+.topbar .user-info b{font-size:15px;}
+.topbar a{color:#fff;text-decoration:none;font-size:13px;padding:8px 16px;border-radius:20px;background:rgba(255,255,255,.15);transition:.3s;}
+.topbar a:hover{background:rgba(255,255,255,.25);}
+
+.card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 4px 20px rgba(45,95,63,.08);margin-bottom:20px;}
+.card h2{font-family:'Amiri',serif;color:var(--hijau-tua);font-size:22px;margin-bottom:6px;}
+.card > p{font-size:13px;color:#7a8a7d;margin-bottom:20px;}
+
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--hijau-tua);margin-bottom:8px;}
+.form-group input,.form-group select{
+  width:100%;padding:12px 14px;font-size:14px;border:2px solid #e0e6e1;border-radius:10px;
+  background:var(--putih);outline:none;transition:.3s;font-family:'Poppins',sans-serif;
+}
+.form-group input:focus,.form-group select:focus{border-color:var(--hijau-muda);background:#fff;box-shadow:0 0 0 4px rgba(123,174,127,.12);}
+
+.checkbox-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px;background:var(--krem);border-radius:10px;}
+.checkbox-item{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;padding:6px;}
+.checkbox-item input{width:16px;height:16px;accent-color:var(--hijau);}
+
+/* PAKET SELECTOR */
+.paket-selector{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+.paket-opt{
+  border:2px solid #e0e6e1;border-radius:14px;padding:16px;cursor:pointer;
+  transition:.3s;position:relative;background:#fff;
+}
+.paket-opt:hover{border-color:var(--hijau-muda);transform:translateY(-2px);}
+.paket-opt.selected{border-color:var(--hijau);background:linear-gradient(135deg,#f0f7f1,#fff);box-shadow:0 6px 18px rgba(45,95,63,.15);}
+.paket-opt.selected::before{content:'✓';position:absolute;top:8px;right:12px;color:var(--hijau);font-weight:700;font-size:18px;}
+.paket-opt h4{color:var(--hijau-tua);font-size:16px;margin-bottom:4px;}
+.paket-opt .paket-hari{font-size:12px;color:#7a8a7d;margin-bottom:8px;}
+.paket-opt .paket-price{font-size:18px;font-weight:700;color:var(--emas);}
+
+/* ===== GRID JADWAL BARU ===== */
+.jadwal-wrap{overflow-x:auto;border-radius:14px;border:1px solid #e0e6e1;background:#fff;}
+table.jadwal{border-collapse:collapse;width:100%;min-width:640px;font-size:12px;background:#fff;}
+table.jadwal th,table.jadwal td{border:1px solid #e0e6e1;text-align:center;vertical-align:middle;padding:0;}
+table.jadwal th{background:var(--hijau-tua);color:#fff;font-weight:600;font-size:12px;padding:10px 6px;}
+table.jadwal th.kolom-hari{background:var(--hijau);}
+table.jadwal td.sesi-label{
+  background:var(--krem);font-weight:600;color:var(--hijau-tua);
+  text-align:left;padding:8px 10px;font-size:11px;min-width:110px;line-height:1.3;
+}
+table.jadwal td.sesi-label .num{font-size:10px;opacity:.7;display:block;}
+
+/* SUB-SLOT */
+td.slot-pair{padding:4px !important;}
+.slot-row{display:flex;gap:3px;}
+.slot-cell{
+  flex:1;min-height:42px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;text-align:center;
+  cursor:pointer;transition:.2s;padding:3px 2px;line-height:1.15;
+  border:2px solid transparent;overflow:hidden;word-break:break-word;
+}
+.slot-cell.kosong{
+  background:#e8f5ea;color:var(--hijau);
+  border-color:#c8e2cd;
+}
+.slot-cell.kosong:hover{background:#d4ecda;border-color:var(--hijau-muda);transform:scale(1.02);}
+.slot-cell.terisi{
+  background:#fff8e1;color:#8a6d00;
+  border-color:#e0c26b;cursor:not-allowed;font-size:9px;
+}
+.slot-cell.penuh{
+  background:#fde8e8;color:#c0392b;
+  border-color:#e88b8b;cursor:not-allowed;font-size:9px;
+}
+.slot-cell.dipilih{
+  background:linear-gradient(135deg,var(--hijau),var(--hijau-muda));
+  color:#fff;border-color:var(--emas);
+  box-shadow:0 0 0 2px var(--emas) inset;
+}
+.slot-cell.di-luar-paket{
+  background:#f4f4f4;color:#bbb;
+  border-color:#e0e0e0;cursor:not-allowed;
+}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:#5a6b5d;}
+.legend span{display:inline-flex;align-items:center;gap:6px;}
+.legend .dot{width:14px;height:14px;border-radius:4px;display:inline-block;}
+.legend .d-kosong{background:#e8f5ea;border:1px solid #c8e2cd;}
+.legend .d-sebagian{background:#fff8e1;border:1px solid #e0c26b;}
+.legend .d-penuh{background:#fde8e8;border:1px solid #e88b8b;}
+.legend .d-dipilih{background:linear-gradient(135deg,var(--hijau),var(--hijau-muda));}
+.legend .d-luar{background:#f4f4f4;border:1px solid #e0e0e0;}
+
+/* RINGKASAN */
+.ringkasan{
+  background:linear-gradient(135deg,var(--krem),#fff);
+  border:2px solid var(--krem-tua);border-radius:14px;padding:20px;
+}
+.ringkasan h4{color:var(--hijau-tua);font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.ringkasan .row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px dashed #ddd;}
+.ringkasan .row:last-child{border-bottom:none;font-weight:700;font-size:15px;padding-top:12px;color:var(--hijau-tua);}
+
+.btn-submit{
+  width:100%;padding:16px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
+  color:#fff;font-weight:700;font-size:16px;cursor:pointer;transition:.3s;letter-spacing:.3px;
+  margin-top:8px;
+}
+.btn-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(45,95,63,.35);}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.alert{padding:14px 18px;border-radius:12px;font-size:14px;margin-bottom:18px;display:none;}
+.alert.error{background:#fde8e8;color:#c0392b;border-left:4px solid #e74c3c;}
+.alert.success{background:#e5f4ea;color:#2D5F3F;border-left:4px solid var(--hijau-muda);}
+.alert.info{background:#e7f3ff;color:#0056b3;border-left:4px solid #4a90e2;}
+
+/* MODAL PENUH */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;
+  display:none;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.show{display:flex;animation:fadeIn .3s;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal{
+  background:#fff;border-radius:24px;padding:40px 32px;max-width:420px;width:100%;
+  text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.3);
+  animation:pop .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop{from{transform:scale(.85);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal .icon-big{font-size:60px;margin-bottom:12px;}
+.modal h3{font-family:'Amiri',serif;color:var(--hijau-tua);font-size:24px;margin-bottom:12px;}
+.modal p{font-size:14px;color:#5a6b5d;line-height:1.7;margin-bottom:24px;}
+.modal .btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.modal .btn-wa-modal{background:#25D366;color:#fff;padding:12px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.3s;}
+.modal .btn-wa-modal:hover{transform:translateY(-2px);}
+.modal .btn-close{background:var(--krem);color:var(--hijau-tua);padding:12px 24px;border-radius:30px;font-weight:600;font-size:14px;border:none;cursor:pointer;transition:.3s;}
+.modal .btn-close:hover{background:var(--krem-tua);}
+
+@media(max-width:600px){
+  .topbar{padding:14px 16px;}
+  .card{padding:20px;}
+  .paket-selector{grid-template-columns:1fr;}
+  .checkbox-grid{grid-template-columns:1fr;}
+  table.jadwal{min-width:700px;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="user-info">
+      Assalamu'alaikum, <b id="namaUser">...</b>
+      <div style="opacity:.8;font-size:12px;">No WA: <span id="waUser">...</span></div>
+    </div>
+    <div>
+      <a href="dashboard-wali.html">📊 Dashboard</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📝 Form Pendaftaran Les</h2>
+    <p>Isi data ananda & pilih jadwal. Slot akan terkunci 10 menit setelah Anda klik Daftar.</p>
+
+    <div id="alert" class="alert"></div>
+
+    <div class="form-group">
+      <label>Nama Santri *</label>
+      <input type="text" id="namaSantri" placeholder="Nama lengkap santri" required>
+    </div>
+
+    <div class="form-group">
+      <label>Pilih Mapel * (bisa lebih dari 1)</label>
+      <div class="checkbox-grid">
+        <label class="checkbox-item"><input type="checkbox" value="Bahasa Arab Dasar"> 📖 Bahasa Arab Dasar</label>
+        <label class="checkbox-item"><input type="checkbox" value="Tajwid"> 📗 Tajwid</label>
+        <label class="checkbox-item"><input type="checkbox" value="Tahsin"> 📘 Tahsin</label>
+        <label class="checkbox-item"><input type="checkbox" value="Hafalan"> 🧠 Hafalan</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Pilih Paket *</label>
+      <div class="paket-selector" id="paketSelector">
+        <div class="paket-opt" data-paket="A">
+          <h4>Paket A</h4>
+          <div class="paket-hari">Ahad s/d Kamis</div>
+          <div class="paket-price">Rp 300.000 / bln</div>
+        </div>
+        <div class="paket-opt" data-paket="B">
+          <h4>Paket B</h4>
+          <div class="paket-hari">Senin, Selasa, Rabu</div>
+          <div class="paket-price">Rp 150.000 / bln</div>
+        </div>
+        <div class="paket-opt" data-paket="C">
+          <h4>Paket C</h4>
+          <div class="paket-hari">Jum'at & Sabtu</div>
+          <div class="paket-price">Rp 300.000 / bln</div>
+        </div>
+        <div class="paket-opt" data-paket="D">
+          <h4>Paket D</h4>
+          <div class="paket-hari">Ahad & Kamis</div>
+          <div class="paket-price">Rp 100.000 / bln</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Pilih Sesi * (jam yang sama tiap hari dalam paket)</label>
+      <p style="font-size:12px;color:#7a8a7d;margin-bottom:10px;">
+        Klik salah satu slot <b>hijau</b> pada kolom hari sesuai paket Anda. Setiap sesi punya 2 slot.
+      </p>
+      <div class="jadwal-wrap">
+        <table class="jadwal" id="tabelJadwal">
+          <thead><tr><th>Sesi</th></tr></thead>
+          <tbody><tr><td style="padding:20px;text-align:center;color:#999;">Pilih paket terlebih dahulu</td></tr></tbody>
+        </table>
+      </div>
+      <div class="legend">
+        <span><span class="dot d-kosong"></span> Kosong (bisa dipilih)</span>
+        <span><span class="dot d-sebagian"></span> Terisi (1 orang)</span>
+        <span><span class="dot d-penuh"></span> Penuh (2 orang)</span>
+        <span><span class="dot d-dipilih"></span> Dipilih</span>
+        <span><span class="dot d-luar"></span> Di luar paket</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Catatan (opsional)</label>
+      <input type="text" id="catatan" placeholder="Contoh: anak baru">
+    </div>
+
+    <div class="ringkasan">
+      <h4>📋 Ringkasan</h4>
+      <div class="row"><span>Santri</span><b id="rSingkat">-</b></div>
+      <div class="row"><span>Mapel</span><b id="rMapel">-</b></div>
+      <div class="row"><span>Paket</span><b id="rPaket">-</b></div>
+      <div class="row"><span>Sesi</span><b id="rSesi">-</b></div>
+      <div class="row"><span>Total</span><b id="rTotal">Rp 0</b></div>
+    </div>
+
+    <button class="btn-submit" id="btnDaftar" style="margin-top:20px;" disabled>Daftar Sekarang</button>
+  </div>
+</div>
+
+<!-- MODAL KELAS PENUH -->
+<div class="modal-overlay" id="modalPenuh">
+  <div class="modal">
+    <div class="icon-big">🌸</div>
+    <h3>Kelas Penuh</h3>
+    <p id="modalPenuhText">
+      Maaf, seluruh jadwal untuk paket ini sudah terisi penuh.<br><br>
+      Semoga Allah memudahkan urusan kita di lain waktu. Silakan hubungi admin untuk info kelas berikutnya.
+    </p>
+    <div class="btn-row">
+      <a href="https://wa.me/6289529999351?text=Assalamu'alaikum,%20saya%20ingin%20bertanya%20ketersediaan%20kelas" 
+         target="_blank" class="btn-wa-modal">📱 Hubungi Admin</a>
+      <button class="btn-close" onclick="closeModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec';
+const ADMIN_WA = '6289529999351';
+
+const PAKET_INFO = {
+  A: { hari:['Ahad','Senin','Selasa','Rabu','Kamis'], tarif:300000, label:'Ahad - Kamis' },
+  B: { hari:['Senin','Selasa','Rabu'],                 tarif:150000, label:'Senin - Rabu' },
+  C: { hari:['Jumat','Sabtu'],                         tarif:300000, label:"Jum'at & Sabtu" },
+  D: { hari:['Ahad','Kamis'],                          tarif:100000, label:'Ahad & Kamis' }
+};
+
+// Daftar hari unik untuk header tabel
+const SEMUA_HARI = ['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+
+const SESI_LIST = [
+  '14:15 - 15:00','15:00 - 15:45','15:45 - 16:30','16:30 - 17:15',
+  'Maghrib - Isya','19:30 - 20:15','20:15 - 21:00','21:00 - 21:45','21:45 - 22:30'
+];
+const MAX_SLOT = 2;
+
+let user = null;
+let token = null;
+let jadwalData = {};      // { hari: { sesi: [nama1, nama2] } }
+let paketDipilih = null;
+let sesiDipilih = null;
+
+// ===== AUTH =====
+function getAuth() {
+  return {
+    token: sessionStorage.getItem('token') || localStorage.getItem('token'),
+    user: JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user') || 'null')
+  };
+}
+function clearAuth() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  sessionStorage.removeItem('token');
+  sessionStorage.removeItem('user');
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', async () => {
+  const auth = getAuth();
+  user = auth.user;
+  token = auth.token;
+  
+  if (!user || user.role !== 'wali') { 
+    window.location.href = 'login.html'; 
+    return; 
+  }
+  
+  const ok = await verifySession();
+  if (!ok) { clearAuth(); window.location.href = 'login.html'; return; }
+  
+  document.getElementById('namaUser').textContent = user.nama;
+  document.getElementById('waUser').textContent = user.noWA;
+
+  setupPaketSelector();
+  await loadJadwal();
+  
+  document.getElementById('btnDaftar').addEventListener('click', submitDaftar);
+  document.getElementById('namaSantri').addEventListener('input', () => { updateRingkasan(); cekTombolDaftar(); });
+  document.querySelectorAll('.checkbox-grid input').forEach(cb => 
+    cb.addEventListener('change', () => { updateRingkasan(); cekTombolDaftar(); })
+  );
+  document.getElementById('catatan').addEventListener('input', () => {});
+});
+
+async function verifySession() {
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST',
+      body:JSON.stringify({ action:'verifySession', token }),
+      headers:{'Content-Type':'text/plain;charset=utf-8'}
+    });
+    const r = await res.json();
+    return r.success;
+  } catch(e) { return false; }
+}
+
+function logout() {
+  if (!confirm('Keluar dari akun?')) return;
+  clearAuth();
+  window.location.href = 'login.html';
+}
+
+function showAlert(msg, type='info') {
+  const a = document.getElementById('alert');
+  a.textContent = msg;
+  a.className = 'alert ' + type;
+  a.style.display = 'block';
+  setTimeout(()=>{ a.style.display='none'; }, 5000);
+}
+
+// ===== PAKET SELECTOR =====
+function setupPaketSelector() {
+  document.querySelectorAll('.paket-opt').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.paket-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      paketDipilih = el.dataset.paket;
+      sesiDipilih = null;
+      renderJadwal();
+      updateRingkasan();
+      cekTombolDaftar();
+    });
+  });
+}
+
+// ===== LOAD JADWAL =====
+async function loadJadwal() {
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST',
+      body:JSON.stringify({ action:'getJadwal' }),
+      headers:{'Content-Type':'text/plain;charset=utf-8'}
+    });
+    const r = await res.json();
+    if (r.success) jadwalData = r.jadwal || {};
+  } catch(e){ console.error(e); }
+}
+
+// ===== HELPER: Ambil daftar nama terisi di (hari, sesi) =====
+function getNamaDiSlot(hari, sesi) {
+  return jadwalData?.[hari]?.[sesi] || [];
+}
+
+// ===== RENDER JADWAL BARU =====
+// Orientasi: baris = sesi, kolom = hari
+// Setiap sel (hari, sesi) punya 2 sub-slot
+function renderJadwal() {
+  const thead = document.querySelector('#tabelJadwal thead tr');
+  const tbody = document.querySelector('#tabelJadwal tbody');
+  tbody.innerHTML = '';
+
+  if (!paketDipilih) {
+    thead.innerHTML = '<th>Sesi</th>';
+    tbody.innerHTML = '<tr><td style="padding:20px;text-align:center;color:#999;">Pilih paket terlebih dahulu</td></tr>';
+    return;
+  }
+
+  const hariList = PAKET_INFO[paketDipilih].hari;
+
+  // Header: Sesi | [hari yang relevan saja]
+  thead.innerHTML = '<th>Sesi</th>' + hariList.map(h => 
+    `<th class="kolom-hari">${h}</th>`
+  ).join('');
+
+  // Baris per sesi
+  SESI_LIST.forEach((sesi, idx) => {
+    const tr = document.createElement('tr');
+    
+    // Kolom kiri: label sesi
+    const tdLabel = document.createElement('td');
+    tdLabel.className = 'sesi-label';
+    tdLabel.innerHTML = `<span class="num">Sesi ${idx+1}</span>${sesi}`;
+    tr.appendChild(tdLabel);
+    
+    // Kolom per hari
+    hariList.forEach(hari => {
+      const td = document.createElement('td');
+      td.className = 'slot-pair';
+      
+      const namaList = getNamaDiSlot(hari, sesi);
+      const terisi = namaList.length;
+      
+      // Buat 2 sub-slot
+      const slotRow = document.createElement('div');
+      slotRow.className = 'slot-row';
+      
+      for (let i = 0; i < MAX_SLOT; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'slot-cell';
+        
+        const nama = namaList[i];
+        
+        if (nama) {
+          // Slot terisi
+          slot.classList.add(terisi >= MAX_SLOT ? 'penuh' : 'terisi');
+          slot.textContent = nama;
+          slot.title = nama;
+        } else {
+          // Slot kosong → bisa dipilih
+          slot.classList.add('kosong');
+          slot.textContent = 'Kosong';
+          slot.title = 'Klik untuk pilih sesi ini';
+          // Simpan data untuk handler
+          slot.dataset.hari = hari;
+          slot.dataset.sesi = sesi;
+          slot.dataset.slotIndex = i;
+          slot.onclick = () => pilihSlot(hari, sesi);
+        }
+        
+        slotRow.appendChild(slot);
+      }
+      
+      td.appendChild(slotRow);
+      tr.appendChild(td);
+    });
+    
+    tbody.appendChild(tr);
+  });
+
+  // Restore highlight kalau sesiDipilih masih ada
+  if (sesiDipilih) {
+    applyHighlightSesi(sesiDipilih);
+  }
+}
+
+// ===== PILIH SLOT =====
+function pilihSlot(hari, sesi) {
+  // Cek dulu apakah semua hari di sesi ini tersedia untuk paket yang dipilih
+  const hariList = PAKET_INFO[paketDipilih].hari;
+  let hariPenuh = [];
+  
+  hariList.forEach(h => {
+    const t = getNamaDiSlot(h, sesi);
+    if (t.length >= MAX_SLOT) hariPenuh.push(h);
+  });
+  
+  if (hariPenuh.length > 0) {
+    showAlert('⚠️ Sesi ini sudah penuh di: ' + hariPenuh.join(', ') + '. Silakan pilih sesi lain.', 'error');
+    return;
+  }
+  
+  // Set sesi terpilih
+  sesiDipilih = sesi;
+  
+  // Hapus semua highlight lama
+  document.querySelectorAll('#tabelJadwal .slot-cell').forEach(el => {
+    if (el.classList.contains('dipilih')) {
+      el.classList.remove('dipilih');
+      el.classList.add('kosong');
+      el.textContent = 'Kosong';
+    }
+  });
+  
+  applyHighlightSesi(sesi);
+  updateRingkasan();
+  cekTombolDaftar();
+}
+
+// Highlight semua sub-slot kosong di sesi terpilih untuk semua hari di paket
+function applyHighlightSesi(sesi) {
+  const hariList = PAKET_INFO[paketDipilih].hari;
+  
+  document.querySelectorAll('#tabelJadwal .slot-cell').forEach(cell => {
+    const cellHari = cell.dataset.hari;
+    const cellSesi = cell.dataset.sesi;
+    
+    if (cellSesi === sesi && hariList.includes(cellHari) && cell.classList.contains('kosong')) {
+      cell.classList.remove('kosong');
+      cell.classList.add('dipilih');
+      cell.textContent = '✓';
+    }
+  });
+}
+
+// ===== VALIDASI TOMBOL =====
+function cekTombolDaftar() {
+  const nama = document.getElementById('namaSantri').value.trim();
+  const mapel = getMapel();
+  const btn = document.getElementById('btnDaftar');
+  btn.disabled = !(nama && mapel.length && paketDipilih && sesiDipilih);
+}
+
+function getMapel() {
+  return Array.from(document.querySelectorAll('.checkbox-grid input:checked')).map(c => c.value);
+}
+
+function updateRingkasan() {
+  const nama = document.getElementById('namaSantri').value.trim();
+  const mapel = getMapel();
+  document.getElementById('rSingkat').textContent = nama || '-';
+  document.getElementById('rMapel').textContent = mapel.length ? mapel.join(', ') : '-';
+  document.getElementById('rPaket').textContent = paketDipilih ? `${paketDipilih} (${PAKET_INFO[paketDipilih].label})` : '-';
+  document.getElementById('rSesi').textContent = sesiDipilih || '-';
+  document.getElementById('rTotal').textContent = paketDipilih ? 'Rp ' + PAKET_INFO[paketDipilih].tarif.toLocaleString('id-ID') : 'Rp 0';
+}
+
+// ===== SUBMIT =====
+async function submitDaftar() {
+  const nama = document.getElementById('namaSantri').value.trim();
+  const mapel = getMapel();
+  const catatan = document.getElementById('catatan').value.trim();
+
+  if (!nama || !mapel.length || !paketDipilih || !sesiDipilih) {
+    showAlert('Lengkapi semua data terlebih dahulu', 'error'); 
+    return;
+  }
+
+  // Validasi ulang (anti race condition)
+  const hariList = PAKET_INFO[paketDipilih].hari;
+  let hariPenuh = [];
+  hariList.forEach(h => {
+    const t = getNamaDiSlot(h, sesiDipilih);
+    if (t.length >= MAX_SLOT) hariPenuh.push(h);
+  });
+  
+  if (hariPenuh.length > 0) {
+    document.getElementById('modalPenuhText').innerHTML =
+      'Maaf, sesi <b>' + sesiDipilih + '</b> pada paket <b>' + paketDipilih + '</b> sudah terisi penuh di hari: <b>' + hariPenuh.join(', ') + '</b>.<br><br>Semoga Allah memudahkan urusan kita di lain waktu. Silakan hubungi admin atau pilih sesi lain.';
+    document.getElementById('modalPenuh').classList.add('show');
+    return;
+  }
+
+  const btn = document.getElementById('btnDaftar');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Memproses...';
+
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST',
+      body:JSON.stringify({
+        action:'register', token, namaSantri:nama, mapel:mapel.join(', '),
+        paket:paketDipilih, sesi:sesiDipilih, catatan
+      }),
+      headers:{'Content-Type':'text/plain;charset=utf-8'}
+    });
+    const r = await res.json();
+    if (!r.success) {
+      if (r.message === 'Kelas penuh') {
+        document.getElementById('modalPenuhText').innerHTML =
+          (r.detail || 'Maaf, kelas untuk paket ini sudah penuh.') +
+          '<br><br>Semoga Allah memudahkan urusan kita di lain waktu. Silakan hubungi admin.';
+        document.getElementById('modalPenuh').classList.add('show');
+      } else if (r.message && (r.message.includes('Sesi habis') || r.message.includes('expired'))) {
+        clearAuth();
+        window.location.href = 'login.html';
+      } else {
+        showAlert(r.message || 'Gagal mendaftar', 'error');
+      }
+      return;
+    }
+    sessionStorage.setItem('kodeDaftar', r.kode);
+    sessionStorage.setItem('batasLock', r.batasLock);
+    sessionStorage.setItem('jumlah', r.tarif);
+    window.location.href = 'pembayaran.html?kode=' + encodeURIComponent(r.kode);
+  } catch (e) {
+    showAlert('Kesalahan jaringan: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Daftar Sekarang';
+  }
+}
+
+function closeModal() {
+  document.getElementById('modalPenuh').classList.remove('show');
+}
+</script>
+
+</body>
+</html>

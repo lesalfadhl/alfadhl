@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - Les Alfadhl</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--hijau-tua:#2D5F3F;--hijau:#3E7B54;--hijau-muda:#7BAE7F;--krem:#F5EFE0;--krem-tua:#EADFC4;--putih:#FAFAF7;--teks:#2C3E2E;--emas:#C9A961;--danger:#c0392b;--danger-bg:#fde8e8;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;}
+
+.layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{
+  width:240px;background:linear-gradient(180deg,var(--hijau-tua),var(--hijau));
+  color:#fff;padding:20px 14px;flex-shrink:0;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.sidebar .brand{
+  font-family:'Amiri',serif;font-size:22px;
+  padding:10px 12px 20px;border-bottom:1px solid rgba(255,255,255,.15);
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.sidebar .brand img{height:32px;width:32px;border-radius:50%;object-fit:cover;background:#fff;padding:2px;}
+.sidebar .menu-item{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;
+  border-radius:10px;color:#fff;text-decoration:none;font-size:14px;
+  transition:.3s;cursor:pointer;margin-bottom:4px;border:none;background:transparent;
+  width:100%;text-align:left;font-family:'Poppins',sans-serif;
+}
+.sidebar .menu-item:hover{background:rgba(255,255,255,.12);}
+.sidebar .menu-item.active{background:var(--emas);color:var(--hijau-tua);font-weight:600;}
+.sidebar .menu-item .badge-count{
+  margin-left:auto;background:#e74c3c;color:#fff;font-size:11px;
+  padding:2px 8px;border-radius:10px;font-weight:700;
+}
+
+/* MAIN */
+.main{flex:1;padding:20px;overflow-x:hidden;}
+
+.topbar{
+  background:#fff;border-radius:16px;padding:16px 22px;
+  box-shadow:0 4px 16px rgba(45,95,63,.08);
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:20px;flex-wrap:wrap;gap:10px;
+}
+.topbar h1{font-family:'Amiri',serif;font-size:20px;color:var(--hijau-tua);}
+.topbar .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.topbar .actions a, .topbar .actions button{
+  padding:8px 16px;border-radius:20px;font-size:13px;text-decoration:none;
+  border:none;cursor:pointer;transition:.3s;font-family:'Poppins',sans-serif;
+  background:var(--krem);color:var(--hijau-tua);font-weight:600;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.topbar .actions a:hover, .topbar .actions button:hover{background:var(--krem-tua);}
+
+.page{display:none;}
+.page.active{display:block;animation:fadeIn .3s;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px;}
+.stat{
+  background:#fff;border-radius:16px;padding:18px;
+  box-shadow:0 4px 16px rgba(45,95,63,.08);
+  border-left:4px solid var(--hijau-muda);
+}
+.stat .num{font-size:24px;font-weight:700;color:var(--hijau-tua);line-height:1;}
+.stat .lbl{font-size:12px;color:#7a8a7d;margin-top:6px;}
+.stat.warning{border-color:#f0ad4e;}
+.stat.warning .num{color:#a67c00;}
+.stat.danger{border-color:#e74c3c;}
+.stat.danger .num{color:#c0392b;}
+.stat.info{border-color:#4a90e2;}
+.stat.info .num{color:#0056b3;}
+
+/* CARD */
+.card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 4px 16px rgba(45,95,63,.08);margin-bottom:20px;}
+.card h2{font-family:'Amiri',serif;color:var(--hijau-tua);font-size:18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.card h2 .btn-add{
+  padding:8px 16px;border-radius:20px;background:var(--hijau);color:#fff;
+  border:none;cursor:pointer;font-size:12px;font-weight:600;transition:.3s;
+  font-family:'Poppins',sans-serif;
+}
+.card h2 .btn-add:hover{background:var(--hijau-tua);}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px;}
+table th{background:var(--krem);color:var(--hijau-tua);text-align:left;padding:10px 12px;font-weight:600;font-size:12px;}
+table td{padding:10px 12px;border-bottom:1px solid #eee;}
+table tr:hover td{background:#fafcf9;}
+
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge.menunggu-bayar{background:#fff8e1;color:#a67c00;}
+.badge.menunggu-konfirmasi{background:#e7f3ff;color:#0056b3;}
+.badge.terdaftar{background:#e5f4ea;color:var(--hijau-tua);}
+.badge.batal{background:#fde8e8;color:#c0392b;}
+.badge.kedaluwarsa{background:#f0f0f0;color:#888;}
+.badge.baru{background:#e7f3ff;color:#0056b3;}
+.badge.aktif{background:#e5f4ea;color:var(--hijau-tua);}
+.badge.nonaktif{background:#f0f0f0;color:#888;}
+
+.btn-xs{
+  padding:6px 12px;font-size:11px;font-weight:600;border:none;
+  border-radius:16px;cursor:pointer;transition:.3s;font-family:'Poppins',sans-serif;
+  margin:0 3px 3px 0;display:inline-flex;align-items:center;gap:4px;
+}
+.btn-xs.primary{background:var(--hijau);color:#fff;}
+.btn-xs.primary:hover{background:var(--hijau-tua);}
+.btn-xs.danger{background:var(--danger-bg);color:var(--danger);}
+.btn-xs.danger:hover{background:#fbd5d5;}
+.btn-xs.outline{background:transparent;border:1.5px solid var(--hijau-muda);color:var(--hijau-tua);}
+.btn-xs.outline:hover{background:var(--krem);}
+
+/* FORM */
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--hijau-tua);margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:11px 14px;font-size:14px;border:2px solid #e0e6e1;
+  border-radius:10px;background:var(--putih);outline:none;transition:.3s;
+  font-family:'Poppins',sans-serif;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--hijau-muda);background:#fff;box-shadow:0 0 0 4px rgba(123,174,127,.12);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+.btn-primary{
+  padding:12px 24px;border-radius:24px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
+  color:#fff;font-weight:600;font-size:14px;border:none;cursor:pointer;
+  transition:.3s;font-family:'Poppins',sans-serif;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(45,95,63,.3);}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+/* ALERT */
+.alert{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:14px;display:none;}
+.alert.error{background:var(--danger-bg);color:var(--danger);border-left:4px solid #e74c3c;}
+.alert.success{background:#e5f4ea;color:var(--hijau-tua);border-left:4px solid var(--hijau-muda);}
+.alert.info{background:#e7f3ff;color:#0056b3;border-left:4px solid #4a90e2;}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;
+  display:none;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.show{display:flex;}
+.modal{
+  background:#fff;border-radius:20px;padding:28px;max-width:440px;width:100%;
+  max-height:90vh;overflow-y:auto;box-shadow:0 30px 60px rgba(0,0,0,.3);
+  animation:pop .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal h3{font-family:'Amiri',serif;color:var(--hijau-tua);font-size:20px;margin-bottom:16px;}
+.modal .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap;}
+.btn-modal{padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:.3s;font-family:'Poppins',sans-serif;}
+.btn-modal.cancel{background:var(--krem);color:var(--hijau-tua);}
+.btn-modal.primary{background:var(--hijau);color:#fff;}
+.btn-modal.primary:hover{background:var(--hijau-tua);}
+.btn-modal.danger{background:var(--danger);color:#fff;}
+.btn-modal.danger:hover{background:#a93226;}
+
+.info-row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px dashed #eee;}
+.info-row:last-child{border-bottom:none;}
+.info-row span{color:#7a8a7d;}
+.info-row b{color:var(--hijau-tua);}
+
+.empty{text-align:center;padding:30px;color:#999;font-size:13px;}
+
+/* MOBILE */
+.mobile-menu-btn{display:none;background:var(--hijau-tua);color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer;font-size:20px;position:fixed;top:14px;left:14px;z-index:998;}
+
+@media(max-width:800px){
+  .sidebar{position:fixed;left:-260px;z-index:997;transition:.3s;}
+  .sidebar.show{left:0;}
+  .main{padding:70px 14px 20px;width:100%;}
+  .mobile-menu-btn{display:block;}
+  .form-row{grid-template-columns:1fr;}
+  .topbar h1{font-size:16px;}
+}
+</style>
+</head>
+<body>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
+      Admin
+    </div>
+    <button class="menu-item active" onclick="showPage('home', this)">📊 Overview</button>
+    <button class="menu-item" onclick="showPage('konfirmasi', this)">💰 Konfirmasi Bayar <span class="badge-count" id="badgeKonfirmasi" style="display:none;">0</span></button>
+    <button class="menu-item" onclick="showPage('pendaftaran', this)">📝 Pendaftaran</button>
+    <button class="menu-item" onclick="showPage('request', this)">📥 Request Akun <span class="badge-count" id="badgeRequest" style="display:none;">0</span></button>
+    <button class="menu-item" onclick="showPage('users', this)">👥 User Wali</button>
+    <button class="menu-item" onclick="showPage('broadcast', this)">📢 Kirim WA</button>
+    <button class="menu-item" onclick="logout()" style="margin-top:20px;background:rgba(255,255,255,.1);">🚪 Logout</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <h1 id="pageTitle">Overview</h1>
+      <div class="actions">
+        <a href="index.html" title="Lihat Beranda, Paket & Kontak">🏠 Beranda</a>
+        <button onclick="refreshCurrent()">🔄 Refresh</button>
+        <span id="autoRefreshIndicator" title="Data otomatis diperbarui tiap 30 detik"
+              style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:20px;background:#e5f4ea;color:var(--hijau-tua);font-size:12px;font-weight:600;">
+          <span id="autoRefreshDot" style="width:8px;height:8px;border-radius:50%;background:#27ae60;display:inline-block;"></span>
+          <span id="autoRefreshText">Auto 30s</span>
+        </span>
+      </div>
+    </div>
+
+    <div id="globalAlert" class="alert"></div>
+
+    <!-- PAGE: HOME -->
+    <div class="page active" id="page-home">
+      <div class="stats">
+        <div class="stat"><div class="num" id="sTotal">0</div><div class="lbl">Total Santri Aktif</div></div>
+        <div class="stat info"><div class="num" id="sWali">0</div><div class="lbl">Total Wali</div></div>
+        <div class="stat warning"><div class="num" id="sKonfirmasi">0</div><div class="lbl">Menunggu Konfirmasi</div></div>
+        <div class="stat danger"><div class="num" id="sReq">0</div><div class="lbl">Request Baru</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="num" id="sA">0</div><div class="lbl">Paket A</div></div>
+        <div class="stat"><div class="num" id="sB">0</div><div class="lbl">Paket B</div></div>
+        <div class="stat"><div class="num" id="sC">0</div><div class="lbl">Paket C</div></div>
+        <div class="stat"><div class="num" id="sD">0</div><div class="lbl">Paket D</div></div>
+      </div>
+      <div class="card">
+        <h2>📚 Distribusi Mapel</h2>
+        <div id="mapelStats" class="empty">Memuat...</div>
+      </div>
+    </div>
+
+    <!-- PAGE: KONFIRMASI -->
+    <div class="page" id="page-konfirmasi">
+      <div class="card">
+        <h2>💰 Menunggu Konfirmasi Pembayaran</h2>
+        <div id="listKonfirmasi" class="empty">Memuat...</div>
+      </div>
+    </div>
+
+    <!-- PAGE: PENDAFTARAN -->
+    <div class="page" id="page-pendaftaran">
+      <div class="card">
+        <h2>
+          📝 Semua Pendaftaran
+          <select id="filterStatus" onchange="renderPendaftaran()" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--krem-tua);font-size:12px;font-family:'Poppins',sans-serif;">
+            <option value="">Semua Status</option>
+            <option value="Menunggu Pembayaran">Menunggu Pembayaran</option>
+            <option value="Menunggu Konfirmasi">Menunggu Konfirmasi</option>
+            <option value="Terdaftar">Terdaftar</option>
+            <option value="Batal">Batal</option>
+            <option value="Kedaluwarsa">Kedaluwarsa</option>
+          </select>
+        </h2>
+        <div id="listPendaftaran" class="empty">Memuat...</div>
+      </div>
+    </div>
+
+    <!-- PAGE: REQUEST -->
+    <div class="page" id="page-request">
+      <div class="card">
+        <h2>📥 Request Akun Masuk</h2>
+        <div id="listRequest" class="empty">Memuat...</div>
+      </div>
+    </div>
+
+    <!-- PAGE: USERS -->
+    <div class="page" id="page-users">
+      <div class="card">
+        <h2>👥 User Wali <button class="btn-add" onclick="openModalBuatAkun()">+ Buat Akun</button></h2>
+        <div id="listUsers" class="empty">Memuat...</div>
+      </div>
+    </div>
+
+    <!-- PAGE: BROADCAST -->
+    <div class="page" id="page-broadcast">
+      <div class="card">
+        <h2>📢 Kirim Pesan WhatsApp</h2>
+        <div class="form-group">
+          <label>Tipe Pengiriman</label>
+          <select id="bcTipe" onchange="toggleBcTarget()">
+            <option value="single">Ke 1 nomor</option>
+            <option value="broadcast">Broadcast ke semua wali aktif</option>
+          </select>
+        </div>
+        <div class="form-group" id="bcTargetWrap">
+          <label>No WhatsApp Target</label>
+          <input type="tel" id="bcTarget" placeholder="08xxxxxxxxxx">
+        </div>
+        <div class="form-group">
+          <label>Pesan</label>
+          <textarea id="bcPesan" rows="6" placeholder="Tulis pesan..."></textarea>
+        </div>
+        <button class="btn-primary" onclick="kirimBroadcast()">📤 Kirim</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: Buat Akun -->
+<div class="modal-overlay" id="modalBuatAkun">
+  <div class="modal">
+    <h3>👥 Buat Akun Wali</h3>
+    <div class="form-group">
+      <label>Nama Wali *</label>
+      <input type="text" id="maNama" placeholder="Nama lengkap">
+    </div>
+    <div class="form-group">
+      <label>No WhatsApp *</label>
+      <input type="tel" id="maWA" placeholder="08xxxxxxxxxx">
+    </div>
+    <div class="form-group">
+      <label>Sandi *</label>
+      <input type="text" id="maPw" placeholder="Sandi untuk wali">
+      <small style="font-size:11px;color:#999;">Akan dikirim otomatis ke WA wali</small>
+    </div>
+    <div class="btn-row">
+      <button class="btn-modal cancel" onclick="closeModal('modalBuatAkun')">Batal</button>
+      <button class="btn-modal primary" onclick="buatAkun()">Buat & Kirim WA</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Tolak -->
+<div class="modal-overlay" id="modalTolak">
+  <div class="modal">
+    <h3>❌ Tolak Pendaftaran</h3>
+    <div class="form-group">
+      <label>Pilih Alasan Preset</label>
+      <select id="tolakPreset" onchange="document.getElementById('tolakAlasan').value = this.value">
+        <option value="">-- Pilih atau tulis manual --</option>
+        <option value="Pembayaran tidak ditemukan">Pembayaran tidak ditemukan</option>
+        <option value="Jumlah pembayaran tidak sesuai">Jumlah pembayaran tidak sesuai</option>
+        <option value="Bukti pembayaran tidak valid">Bukti pembayaran tidak valid</option>
+        <option value="Data tidak lengkap">Data tidak lengkap</option>
+        <option value="Slot sudah terisi">Slot sudah terisi</option>
+        <option value="Lainnya">Lainnya (tulis manual)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Alasan (bisa diedit) *</label>
+      <textarea id="tolakAlasan" rows="3" placeholder="Tulis alasan penolakan"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn-modal cancel" onclick="closeModal('modalTolak')">Batal</button>
+      <button class="btn-modal danger" onclick="konfirmasiTolak()">Tolak & Kirim WA</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec';
+
+let token = null, user = null;
+let dataPendaftaran = [];
+let dataUsers = [];
+let dataRequest = [];
+let currentPage = 'home';
+let tolakRowIndex = null;
+
+// ===== AUTH HELPER =====
+function getAuth() {
+  return {
+    token: sessionStorage.getItem('token') || localStorage.getItem('token'),
+    user: JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user') || 'null')
+  };
+}
+
+function clearAuth() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  sessionStorage.removeItem('token');
+  sessionStorage.removeItem('user');
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', async () => {
+  const auth = getAuth();
+  token = auth.token;
+  user = auth.user;
+  
+  if (!user || user.role !== 'admin') { 
+    window.location.href = 'login.html'; 
+    return; 
+  }
+  
+  const ok = await verifySession();
+  if (!ok) { 
+    clearAuth();
+    window.location.href = 'login.html'; 
+    return; 
+  }
+  
+  await loadAll();
+  loadHome();
+});
+
+async function verifySession() {
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST',
+      body:JSON.stringify({ action:'verifySession', token }),
+      headers:{'Content-Type':'text/plain;charset=utf-8'}
+    });
+    const r = await res.json();
+    return r.success;
+  } catch(e) { return false; }
+}
+
+function logout() {
+  if (!confirm('Logout dari admin panel?')) return;
+  clearAuth();
+  window.location.href = 'login.html';
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('show');
+}
+
+function showPage(page, btn) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.sidebar .menu-item').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const titles = {
+    home: 'Overview', konfirmasi: 'Konfirmasi Pembayaran',
+    pendaftaran: 'Semua Pendaftaran', request: 'Request Akun',
+    users: 'User Wali', broadcast: 'Kirim WhatsApp'
+  };
+  document.getElementById('pageTitle').textContent = titles[page] || 'Admin';
+  if (window.innerWidth <= 800) document.getElementById('sidebar').classList.remove('show');
+  
+  if (page === 'home') loadHome();
+  if (page === 'konfirmasi') renderKonfirmasi();
+  if (page === 'pendaftaran') renderPendaftaran();
+  if (page === 'request') renderRequest();
+  if (page === 'users') renderUsers();
+}
+
+async function refreshCurrent() {
+  await loadAll();
+  showPage(currentPage);
+  showAlert('Data diperbarui', 'success');
+  countdownValue = 30;
+  updateAutoRefreshIndicator();
+}
+
+async function loadAll() {
+  await Promise.all([loadStats(), loadPendaftaran(), loadUsers(), loadRequest()]);
+}
+
+function showAlert(msg, type='info') {
+  const a = document.getElementById('globalAlert');
+  a.textContent = msg;
+  a.className = 'alert ' + type;
+  a.style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>a.style.display='none', 4000);
+}
+
+// ===== API CALL =====
+async function apiCall(payload) {
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST', 
+      body:JSON.stringify({...payload, token}),
+      headers:{'Content-Type':'text/plain;charset=utf-8'}
+    });
+    const r = await res.json();
+    if (!r.success && r.message && (r.message.includes('Akses ditolak') || r.message.includes('Session expired'))) {
+      clearAuth();
+      window.location.href = 'login.html';
+    }
+    return r;
+  } catch(e) {
+    return {success:false, message: e.message};
+  }
+}
+
+// ===== LOADERS =====
+async function loadStats() {
+  try {
+    const r = await apiCall({action:'adminGetStats'});
+    if (!r.success) return;
+    const s = r.stats;
+    document.getElementById('sTotal').textContent = s.totalSantri;
+    document.getElementById('sWali').textContent = s.totalWali;
+    document.getElementById('sKonfirmasi').textContent = s.menungguKonfirmasi;
+    document.getElementById('sReq').textContent = s.reqBaru;
+    document.getElementById('sA').textContent = s.paketA || 0;
+    document.getElementById('sB').textContent = s.paketB || 0;
+    document.getElementById('sC').textContent = s.paketC || 0;
+    document.getElementById('sD').textContent = s.paketD || 0;
+    
+    const badgeK = document.getElementById('badgeKonfirmasi');
+    if (s.menungguKonfirmasi > 0) { 
+      badgeK.textContent = s.menungguKonfirmasi; 
+      badgeK.style.display='inline-block'; 
+    } else {
+      badgeK.style.display = 'none';
+    }
+    
+    const badgeR = document.getElementById('badgeRequest');
+    if (s.reqBaru > 0) { 
+      badgeR.textContent = s.reqBaru; 
+      badgeR.style.display='inline-block'; 
+    } else {
+      badgeR.style.display = 'none';
+    }
+    
+    const mc = s.mapelCount || {};
+    const total = Object.values(mc).reduce((a,b)=>a+b,0) || 1;
+    const arr = Object.entries(mc).sort((a,b)=>b[1]-a[1]);
+    if (arr.length === 0) {
+      document.getElementById('mapelStats').innerHTML = '<div class="empty">Belum ada data</div>';
+    } else {
+      document.getElementById('mapelStats').innerHTML = arr.map(([k,v]) => `
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+            <b style="color:var(--hijau-tua);">${escapeHtml(k)}</b>
+            <span style="color:#7a8a7d;">${v} santri (${Math.round(v/total*100)}%)</span>
+          </div>
+          <div style="height:8px;background:var(--krem);border-radius:4px;overflow:hidden;">
+            <div style="height:100%;width:${v/total*100}%;background:linear-gradient(90deg,var(--hijau-tua),var(--hijau-muda));"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+  } catch(e){ console.error(e); }
+}
+
+async function loadPendaftaran() {
+  try {
+    const r = await apiCall({action:'adminGetAll'});
+    if (r.success) dataPendaftaran = r.data;
+  } catch(e){ console.error(e); }
+}
+
+async function loadUsers() {
+  try {
+    const r = await apiCall({action:'adminGetUsers'});
+    if (r.success) dataUsers = r.data;
+  } catch(e){ console.error(e); }
+}
+
+async function loadRequest() {
+  try {
+    const r = await apiCall({action:'adminGetRequest'});
+    if (r.success) dataRequest = r.data;
+  } catch(e){ console.error(e); }
+}
+
+// ===== RENDER =====
+function loadHome() { loadStats(); }
+
+function renderKonfirmasi() {
+  const el = document.getElementById('listKonfirmasi');
+  const list = dataPendaftaran.filter(d => d.status === 'Menunggu Konfirmasi');
+  if (list.length === 0) {
+    el.innerHTML = '<div class="empty">✅ Tidak ada yang menunggu konfirmasi</div>';
+    return;
+  }
+  el.innerHTML = list.map(d => `
+    <div style="border:2px solid #e0e6e1;border-radius:14px;padding:16px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div><b style="color:var(--hijau-tua);font-size:15px;">👦 ${escapeHtml(d.namaSantri)}</b>
+        <div style="font-size:12px;color:#7a8a7d;">Kode: ${d.kode}</div></div>
+        <span class="badge menunggu-konfirmasi">${d.status}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:13px;margin-bottom:12px;">
+        <div><span style="color:#7a8a7d;font-size:11px;display:block;">Wali</span><b>${escapeHtml(d.namaWali)}</b></div>
+        <div><span style="color:#7a8a7d;font-size:11px;display:block;">WA Wali</span><b>${d.noWAWali}</b></div>
+        <div><span style="color:#7a8a7d;font-size:11px;display:block;">Paket</span><b>${d.paket} | ${escapeHtml(d.sesi)}</b></div>
+        <div><span style="color:#7a8a7d;font-size:11px;display:block;">Jumlah</span><b style="color:var(--hijau-tua);">Rp ${Number(d.jumlah).toLocaleString('id-ID')}</b></div>
+      </div>
+      <div>
+        <button class="btn-xs primary" onclick="approve(${d.rowIndex})">✅ Approve</button>
+        <button class="btn-xs danger" onclick="openTolak(${d.rowIndex})">❌ Tolak</button>
+        <a href="https://wa.me/${d.noWAWali}?text=${encodeURIComponent('Assalamu\'alaikum Bapak/Ibu ' + d.namaWali + ', terkait konfirmasi pembayaran ananda ' + d.namaSantri + ' (Kode: ' + d.kode + ')')}" target="_blank" class="btn-xs outline" style="text-decoration:none;">💬 Chat Wali</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderPendaftaran() {
+  const el = document.getElementById('listPendaftaran');
+  const f = document.getElementById('filterStatus').value;
+  const list = f ? dataPendaftaran.filter(d => d.status === f) : dataPendaftaran;
+  if (list.length === 0) {
+    el.innerHTML = '<div class="empty">Belum ada pendaftaran</div>';
+    return;
+  }
+  el.innerHTML = `
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Kode</th><th>Santri</th><th>Wali</th><th>Paket/Sesi</th><th>Mapel</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody>
+      ${list.map(d => `
+        <tr>
+          <td style="font-family:monospace;font-size:11px;">${d.kode}</td>
+          <td><b>${escapeHtml(d.namaSantri)}</b></td>
+          <td>${escapeHtml(d.namaWali)}<br><small style="color:#999;">${d.noWAWali}</small></td>
+          <td>${d.paket}<br><small>${escapeHtml(d.sesi)}</small></td>
+          <td><small>${escapeHtml(d.mapel)}</small></td>
+          <td><span class="badge ${badgeClass(d.status)}">${d.status}</span></td>
+          <td>${rowActions(d)}</td>
+        </tr>
+      `).join('')}
+      </tbody>
+    </table>
+    </div>
+  `;
+}
+
+function rowActions(d) {
+  let a = '';
+  if (d.status === 'Menunggu Konfirmasi') {
+    a += `<button class="btn-xs primary" onclick="approve(${d.rowIndex})">✅</button>`;
+    a += `<button class="btn-xs danger" onclick="openTolak(${d.rowIndex})">❌</button>`;
+  }
+  a += `<a href="https://wa.me/${d.noWAWali}" target="_blank" class="btn-xs outline" style="text-decoration:none;">💬</a>`;
+  return a;
+}
+
+function renderRequest() {
+  const el = document.getElementById('listRequest');
+  if (dataRequest.length === 0) { 
+    el.innerHTML = '<div class="empty">Belum ada request</div>'; 
+    return; 
+  }
+  el.innerHTML = dataRequest.map(r => `
+    <div style="border:2px solid #e0e6e1;border-radius:12px;padding:14px;margin-bottom:10px;${r.status==='Baru'?'border-color:var(--hijau-muda);':''}">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+        <b style="color:var(--hijau-tua);">${escapeHtml(r.namaWali)}</b>
+        <span class="badge ${r.status==='Baru'?'baru':'aktif'}">${r.status}</span>
+      </div>
+      <div style="font-size:13px;color:#5a6b5d;">
+        📱 ${r.noWA}<br>
+        👦 ${escapeHtml(r.namaSantri)} | 📚 ${escapeHtml(r.mapel)} | 📦 ${r.paket}<br>
+        ${r.catatan ? '📝 ' + escapeHtml(r.catatan) : ''}
+      </div>
+      <div style="margin-top:10px;">
+        <button class="btn-xs primary" onclick="buatDariRequest('${escapeHtml(r.namaWali).replace(/'/g,'&#39;')}','${r.noWA}')">✅ Buat Akun</button>
+        <a href="https://wa.me/${r.noWA}" target="_blank" class="btn-xs outline" style="text-decoration:none;">💬 Chat</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderUsers() {
+  const el = document.getElementById('listUsers');
+  if (dataUsers.length === 0) { 
+    el.innerHTML = '<div class="empty">Belum ada user wali</div>'; 
+    return; 
+  }
+  el.innerHTML = `
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Nama</th><th>No WA</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody>
+        ${dataUsers.map(u => `
+          <tr>
+            <td><b>${escapeHtml(u.nama)}</b><br><small style="color:#999;">${u.userID}</small></td>
+            <td>${u.noWA}</td>
+            <td><span class="badge ${u.status==='aktif'?'aktif':'nonaktif'}">${u.status}</span></td>
+            <td>
+              <a href="https://wa.me/${u.noWA}" target="_blank" class="btn-xs outline" style="text-decoration:none;">💬 Chat</a>
+              ${u.status==='aktif' ? `<button class="btn-xs danger" onclick="nonaktifkan(${u.rowIndex})">Nonaktifkan</button>` : ''}
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+    </div>
+  `;
+}
+
+function badgeClass(s) {
+  const m = {
+    'Menunggu Pembayaran':'menunggu-bayar',
+    'Menunggu Konfirmasi':'menunggu-konfirmasi',
+    'Terdaftar':'terdaftar',
+    'Batal':'batal',
+    'Kedaluwarsa':'kedaluwarsa'
+  };
+  return m[s] || '';
+}
+
+// ===== ACTIONS =====
+async function approve(rowIndex) {
+  if (!confirm('Approve pendaftaran ini? Slot menjadi permanen & tidak bisa dibatalkan wali.')) return;
+  const r = await apiCall({action:'adminKonfirmasi', rowIndex});
+  if (r.success) {
+    showAlert('✅ Berhasil di-approve. Notifikasi WA terkirim ke wali.', 'success');
+    await loadAll(); 
+    renderKonfirmasi();
+  } else {
+    showAlert(r.message, 'error');
+  }
+}
+
+function openTolak(rowIndex) {
+  tolakRowIndex = rowIndex;
+  document.getElementById('tolakAlasan').value = '';
+  document.getElementById('tolakPreset').value = '';
+  document.getElementById('modalTolak').classList.add('show');
+}
+
+async function konfirmasiTolak() {
+  const alasan = document.getElementById('tolakAlasan').value.trim();
+  if (!alasan) { 
+    alert('Isi alasan penolakan'); 
+    return; 
+  }
+  const r = await apiCall({action:'adminTolak', rowIndex:tolakRowIndex, alasan});
+  if (r.success) {
+    closeModal('modalTolak');
+    showAlert('❌ Pendaftaran ditolak. Notifikasi WA terkirim.', 'success');
+    await loadAll(); 
+    renderKonfirmasi();
+  } else {
+    showAlert(r.message, 'error');
+  }
+}
+
+function openModalBuatAkun() {
+  document.getElementById('maNama').value = '';
+  document.getElementById('maWA').value = '';
+  document.getElementById('maPw').value = '';
+  document.getElementById('modalBuatAkun').classList.add('show');
+}
+
+function buatDariRequest(nama, wa) {
+  document.getElementById('maNama').value = nama;
+  document.getElementById('maWA').value = wa;
+  document.getElementById('maPw').value = '';
+  document.getElementById('modalBuatAkun').classList.add('show');
+}
+
+async function buatAkun() {
+  const nama = document.getElementById('maNama').value.trim();
+  const noWA = document.getElementById('maWA').value.trim();
+  const password = document.getElementById('maPw').value.trim();
+  if (!nama || !noWA || !password) { 
+    alert('Lengkapi semua field'); 
+    return; 
+  }
+  const r = await apiCall({action:'adminBuatAkun', nama, noWA, password});
+  if (r.success) {
+    closeModal('modalBuatAkun');
+    showAlert('✅ Akun dibuat. Notifikasi WA terkirim ke wali.', 'success');
+    await loadUsers(); 
+    renderUsers(); 
+    await loadRequest(); 
+    renderRequest();
+  } else {
+    showAlert(r.message, 'error');
+  }
+}
+
+async function nonaktifkan(rowIndex) {
+  if (!confirm('Nonaktifkan user ini? User tidak bisa login lagi.')) return;
+  const r = await apiCall({action:'adminHapusUser', rowIndex});
+  if (r.success) { 
+    showAlert('User dinonaktifkan', 'success'); 
+    await loadUsers(); 
+    renderUsers(); 
+  }
+}
+
+function toggleBcTarget() {
+  const t = document.getElementById('bcTipe').value;
+  document.getElementById('bcTargetWrap').style.display = t === 'single' ? 'block' : 'none';
+}
+
+async function kirimBroadcast() {
+  const tipe = document.getElementById('bcTipe').value;
+  const target = document.getElementById('bcTarget').value.trim();
+  const pesan = document.getElementById('bcPesan').value.trim();
+  if (!pesan) { 
+    alert('Isi pesan'); 
+    return; 
+  }
+  if (tipe === 'single' && !target) { 
+    alert('Isi nomor target'); 
+    return; 
+  }
+  if (tipe === 'broadcast' && !confirm('Kirim ke SEMUA wali aktif?')) return;
+  
+  const r = await apiCall({
+    action:'adminKirimWA',
+    broadcast: tipe === 'broadcast',
+    target: target,
+    pesan: pesan
+  });
+  if (r.success) {
+    showAlert(tipe==='broadcast' ? `✅ Terkirim ke ${r.count} wali` : '✅ Pesan terkirim', 'success');
+    document.getElementById('bcPesan').value = '';
+  } else {
+    showAlert(r.message, 'error');
+  }
+}
+
+function closeModal(id) { 
+  document.getElementById(id).classList.remove('show'); 
+}
+
+function escapeHtml(t) {
+  if (!t) return '';
+  return String(t).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { 
+    if (e.target === o) o.classList.remove('show'); 
+  });
+});
+
+// ===== AUTO REFRESH SETIAP 30 DETIK =====
+let autoRefreshTimer = null;
+let countdownTimer = null;
+let countdownValue = 30;
+
+function startAutoRefresh() {
+  if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+  if (countdownTimer) clearInterval(countdownTimer);
+  
+  countdownValue = 30;
+  updateAutoRefreshIndicator();
+  
+  countdownTimer = setInterval(() => {
+    countdownValue--;
+    if (countdownValue < 0) countdownValue = 30;
+    updateAutoRefreshIndicator();
+  }, 1000);
+  
+  autoRefreshTimer = setInterval(async () => {
+    // Skip kalau tab tidak aktif (hemat kuota)
+    if (document.hidden) return;
+    
+    // Skip kalau ada modal terbuka (sedang input)
+    const anyModalOpen = document.querySelector('.modal-overlay.show');
+    if (anyModalOpen) {
+      console.log('⏸️ Skip auto-refresh karena ada modal terbuka');
+      return;
+    }
+    
+    console.log('🔄 Auto-refresh...');
+    countdownValue = 30;
+    
+    try {
+      await loadAll();
+      if (currentPage === 'home') loadHome();
+      else if (currentPage === 'konfirmasi') renderKonfirmasi();
+      else if (currentPage === 'pendaftaran') renderPendaftaran();
+      else if (currentPage === 'request') renderRequest();
+      else if (currentPage === 'users') renderUsers();
+      
+      // Efek kedip indikator hijau → kuning → hijau
+      const dot = document.getElementById('autoRefreshDot');
+      if (dot) {
+        dot.style.background = '#f0ad4e';
+        setTimeout(() => { dot.style.background = '#27ae60'; }, 800);
+      }
+    } catch(e) {
+      console.warn('Auto-refresh gagal:', e);
+    }
+  }, 30000);
+}
+
+function updateAutoRefreshIndicator() {
+  const text = document.getElementById('autoRefreshText');
+  if (text) text.textContent = 'Auto ' + countdownValue + 's';
+}
+
+// Pause saat tab tidak aktif, resume saat aktif
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    countdownValue = 30;
+    updateAutoRefreshIndicator();
+  }
+});
+
+// Mulai auto-refresh setelah load
+window.addEventListener('load', () => {
+  setTimeout(startAutoRefresh, 2000);
+});
+</script>
+
+</body>
+</html>

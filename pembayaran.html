@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pembayaran - Les Alfadhl</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--hijau-tua:#2D5F3F;--hijau:#3E7B54;--hijau-muda:#7BAE7F;--krem:#F5EFE0;--krem-tua:#EADFC4;--putih:#FAFAF7;--teks:#2C3E2E;--emas:#C9A961;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;padding:20px;}
+.wrap{max-width:700px;margin:0 auto;}
+
+.hero-box{
+  background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
+  color:#fff;padding:32px 24px;border-radius:24px;text-align:center;
+  box-shadow:0 12px 30px rgba(45,95,63,.25);margin-bottom:20px;
+}
+.hero-box .check{font-size:60px;margin-bottom:8px;display:block;}
+.hero-box h1{font-family:'Amiri',serif;font-size:26px;margin-bottom:6px;}
+.hero-box p{font-size:13px;opacity:.9;}
+.kode-box{
+  background:rgba(255,255,255,.15);border:2px dashed rgba(255,255,255,.4);
+  border-radius:14px;padding:14px;margin-top:16px;
+}
+.kode-box .label{font-size:11px;letter-spacing:2px;opacity:.8;text-transform:uppercase;}
+.kode-box .kode{font-size:24px;font-weight:700;color:var(--emas);letter-spacing:2px;margin-top:4px;font-family:'Courier New',monospace;}
+
+.timer-box{
+  background:#fff;border-radius:20px;padding:24px;text-align:center;
+  box-shadow:0 4px 20px rgba(45,95,63,.08);margin-bottom:20px;
+  border:3px solid var(--hijau-muda);transition:.3s;
+}
+.timer-box.warning{border-color:#f0ad4e;background:#fffbf0;}
+.timer-box.danger{border-color:#e74c3c;background:#fdf3f2;animation:blink 1s infinite;}
+@keyframes blink{50%{opacity:.85;}}
+.timer-box .title{font-size:12px;letter-spacing:2px;color:#7a8a7d;text-transform:uppercase;margin-bottom:10px;}
+.timer-box .clock{
+  font-size:56px;font-weight:700;color:var(--hijau-tua);
+  font-family:'Courier New',monospace;letter-spacing:4px;line-height:1;
+}
+.timer-box.warning .clock{color:#a67c00;}
+.timer-box.danger .clock{color:#c0392b;}
+.timer-box .desc{font-size:12px;color:#7a8a7d;margin-top:10px;}
+
+.card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(45,95,63,.08);margin-bottom:20px;}
+.card h2{font-family:'Amiri',serif;color:var(--hijau-tua);font-size:20px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+
+.detail-list{background:var(--krem);border-radius:12px;padding:16px;}
+.detail-list .row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px dashed #d5cbb0;}
+.detail-list .row:last-child{border-bottom:none;padding-top:14px;font-weight:700;font-size:16px;color:var(--hijau-tua);}
+
+.tabs{display:flex;gap:8px;margin-bottom:16px;background:var(--krem);padding:6px;border-radius:14px;}
+.tab{
+  flex:1;padding:12px;border:none;background:transparent;cursor:pointer;
+  font-weight:600;font-size:13px;color:var(--hijau-tua);border-radius:10px;transition:.3s;
+  font-family:'Poppins',sans-serif;
+}
+.tab.active{background:#fff;box-shadow:0 4px 12px rgba(45,95,63,.15);}
+.tab-content{display:none;text-align:center;padding:20px;background:var(--putih);border-radius:12px;}
+.tab-content.active{display:block;}
+.qris-img{max-width:260px;width:100%;border-radius:12px;background:#fff;padding:8px;border:2px solid #e0e6e1;}
+.qris-placeholder{
+  width:220px;height:220px;margin:0 auto;background:var(--krem);
+  border-radius:12px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  font-size:60px;color:var(--hijau-muda);
+  border:2px dashed var(--hijau-muda);
+}
+.qris-placeholder p{font-size:12px;color:#7a8a7d;margin-top:8px;padding:0 10px;line-height:1.4;}
+.rek-box{
+  background:#fff;border:2px solid var(--hijau-muda);border-radius:12px;
+  padding:16px;margin-top:12px;
+}
+.rek-box .label{font-size:11px;letter-spacing:1px;color:#7a8a7d;text-transform:uppercase;margin-bottom:4px;}
+.rek-box .nomor{font-size:22px;font-weight:700;color:var(--hijau-tua);font-family:'Courier New',monospace;letter-spacing:1px;}
+.rek-box .an{font-size:12px;color:#7a8a7d;margin-top:4px;}
+.btn-copy{
+  margin-top:10px;padding:8px 18px;background:var(--hijau);color:#fff;border:none;
+  border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:.3s;
+  font-family:'Poppins',sans-serif;
+}
+.btn-copy:hover{background:var(--hijau-tua);}
+
+.steps-info{
+  background:linear-gradient(135deg,#fff8e1,var(--krem));
+  border-left:4px solid var(--emas);border-radius:12px;padding:16px;
+  font-size:13px;line-height:1.8;
+}
+.steps-info ol{padding-left:20px;}
+.steps-info b{color:var(--hijau-tua);}
+
+.btn-primary{
+  width:100%;padding:16px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
+  color:#fff;font-weight:700;font-size:15px;cursor:pointer;transition:.3s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-top:8px;text-decoration:none;font-family:'Poppins',sans-serif;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(45,95,63,.35);}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+.btn-wa{
+  background:linear-gradient(135deg,#25D366,#1ea855);color:#fff;
+  width:100%;padding:16px;border:none;border-radius:14px;
+  font-weight:700;font-size:15px;cursor:pointer;transition:.3s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-top:8px;text-decoration:none;font-family:'Poppins',sans-serif;
+}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(37,211,102,.35);}
+
+.btn-secondary{
+  background:var(--krem);color:var(--hijau-tua);width:100%;padding:14px;
+  border:none;border-radius:12px;font-weight:600;font-size:14px;
+  cursor:pointer;transition:.3s;margin-top:10px;font-family:'Poppins',sans-serif;
+  text-decoration:none;display:block;text-align:center;
+}
+.btn-secondary:hover{background:var(--krem-tua);}
+
+.alert{padding:14px 18px;border-radius:12px;font-size:14px;margin-bottom:18px;display:none;}
+.alert.error{background:#fde8e8;color:#c0392b;border-left:4px solid #e74c3c;}
+.alert.success{background:#e5f4ea;color:#2D5F3F;border-left:4px solid var(--hijau-muda);}
+.alert.info{background:#e7f3ff;color:#0056b3;border-left:4px solid #4a90e2;}
+
+.status-bar{
+  padding:20px;border-radius:16px;font-size:14px;
+  text-align:center;margin-bottom:20px;
+}
+.status-bar.confirm{background:#e7f3ff;color:#0056b3;}
+.status-bar.expired{background:#fde8e8;color:#c0392b;}
+.status-bar.terdaftar{background:#e5f4ea;color:var(--hijau-tua);}
+
+/* ===== MODAL POP-UP ===== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;
+  display:none;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(6px);
+}
+.modal-overlay.show{display:flex;animation:fadeIn .3s;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal-popup{
+  background:#fff;border-radius:24px;padding:40px 32px;max-width:420px;width:100%;
+  text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.3);
+  animation:pop .5s cubic-bezier(.34,1.56,.64,1);
+  position:relative;overflow:hidden;
+}
+@keyframes pop{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-popup::before{
+  content:'';position:absolute;top:-50%;left:-20%;width:140%;height:100%;
+  background:radial-gradient(circle,rgba(201,169,97,.15),transparent 60%);
+  pointer-events:none;
+}
+.modal-popup .modal-icon{
+  font-size:72px;margin-bottom:16px;display:inline-block;
+  animation:bounce .8s ease infinite alternate;
+}
+@keyframes bounce{
+  from{transform:translateY(0);}
+  to{transform:translateY(-8px);}
+}
+.modal-popup h3{
+  font-family:'Amiri',serif;color:var(--hijau-tua);
+  font-size:26px;margin-bottom:12px;position:relative;z-index:2;
+}
+.modal-popup p{
+  font-size:14px;color:#5a6b5d;line-height:1.7;
+  margin-bottom:24px;position:relative;z-index:2;
+}
+.modal-popup .modal-info{
+  background:var(--krem);border-radius:12px;padding:14px;
+  margin-bottom:20px;font-size:13px;text-align:left;
+  position:relative;z-index:2;
+}
+.modal-popup .modal-info .row{
+  display:flex;justify-content:space-between;padding:4px 0;
+}
+.modal-popup .modal-info .row b{color:var(--hijau-tua);}
+.modal-popup .modal-actions{
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+  position:relative;z-index:2;
+}
+.modal-btn{
+  padding:14px 28px;border-radius:30px;font-weight:600;font-size:14px;
+  border:none;cursor:pointer;transition:.3s;font-family:'Poppins',sans-serif;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  min-width:140px;justify-content:center;
+}
+.modal-btn.primary{
+  background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
+  color:#fff;box-shadow:0 8px 20px rgba(45,95,63,.35);
+}
+.modal-btn.primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(45,95,63,.5);}
+.modal-btn.wa{background:#25D366;color:#fff;}
+.modal-btn.wa:hover{background:#1ea855;transform:translateY(-2px);}
+.modal-btn.outline{
+  background:var(--krem);color:var(--hijau-tua);
+}
+.modal-btn.outline:hover{background:var(--krem-tua);}
+
+@media(max-width:600px){
+  .timer-box .clock{font-size:44px;letter-spacing:2px;}
+  .kode-box .kode{font-size:20px;}
+  .tab{font-size:12px;padding:10px 6px;}
+  .modal-popup{padding:32px 22px;}
+  .modal-popup h3{font-size:22px;}
+  .modal-popup .modal-icon{font-size:60px;}
+  .modal-btn{min-width:120px;padding:12px 20px;font-size:13px;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div id="alert" class="alert"></div>
+
+  <div class="hero-box">
+    <span class="check">✅</span>
+    <h1>Pendaftaran Berhasil</h1>
+    <p>Segera selesaikan pembayaran Anda</p>
+    <div class="kode-box">
+      <div class="label">Kode Daftar</div>
+      <div class="kode" id="kodeTxt">-</div>
+    </div>
+  </div>
+
+  <!-- TIMER -->
+  <div class="timer-box" id="timerBox">
+    <div class="title">⏰ Sisa Waktu Pembayaran</div>
+    <div class="clock" id="timerClock">10:00</div>
+    <div class="desc" id="timerDesc">Selesaikan pembayaran sebelum waktu habis</div>
+  </div>
+
+  <!-- DETAIL -->
+  <div class="card">
+    <h2>📋 Detail Pendaftaran</h2>
+    <div class="detail-list" id="detailList">
+      <div class="row"><span>Kode</span><b id="dKode">-</b></div>
+      <div class="row"><span>Total</span><b id="dTotal">Rp -</b></div>
+    </div>
+  </div>
+
+  <!-- METODE BAYAR -->
+  <div class="card">
+    <h2>💳 Pilih Metode Pembayaran</h2>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('cash', event)">💳 Cash</button>
+      <button class="tab" onclick="switchTab('qris', event)">🔳 QRIS</button>
+      <button class="tab" onclick="switchTab('dana', event)">💙 DANA</button>
+      <button class="tab" onclick="switchTab('seabank', event)">🏦 SeaBank</button>
+    </div>
+
+
+    <div class="tab-content active" id="tab-cash">
+      <p style="font-size:13px;color:#7a8a7d;margin-bottom:4px;">Pembayaran langsung ke Admin</p>
+      <div class="rek-box">
+        <div class="label">Langsung menuju alamat berikut</div>
+        <div class="nomor" id="nomorDana">Perum Citra Kebun Mas Blok D11 No.23, RT025/009, Bengle, Majalaya, Karawang Timur 41388</div>
+        <button class="btn-copy" onclick="copyText('Perum Citra Kebun Mas Blok D11 No.23, RT025/009, Bengle, Majalaya, Karawang Timur 41388')">📋 Salin Alamat</button>
+      </div>
+    </div>
+
+
+    <div class="tab-content" id="tab-qris">
+      <p style="font-size:13px;color:#7a8a7d;margin-bottom:12px;">Scan QR berikut dengan aplikasi apapun yang mendukung QRIS</p>
+      <img src="assets/qris.png" alt="QRIS" class="qris-img" 
+           onerror="this.outerHTML='<div class=&quot;qris-placeholder&quot;>🔳<p>Gambar QRIS belum tersedia<br>Silakan hubungi admin</p></div>'">
+    </div>
+
+    <div class="tab-content" id="tab-dana">
+      <p style="font-size:13px;color:#7a8a7d;margin-bottom:4px;">Transfer ke nomor DANA</p>
+      <div class="rek-box">
+        <div class="label">Nomor DANA</div>
+        <div class="nomor" id="nomorDana">089529999351</div>
+        <div class="an">a.n. Saepul Anwar</div>
+        <button class="btn-copy" onclick="copyText('089529999351')">📋 Salin Nomor</button>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-seabank">
+      <p style="font-size:13px;color:#7a8a7d;margin-bottom:4px;">Transfer ke rekening SeaBank</p>
+      <div class="rek-box">
+        <div class="label">Nomor Rekening</div>
+        <div class="nomor" id="nomorSeaBank">901867760400</div>
+        <div class="an">a.n. Saepul Anwar</div>
+        <button class="btn-copy" onclick="copyText('901867760400')">📋 Salin Nomor</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LANGKAH -->
+  <div class="card">
+    <h2>📝 Setelah Transfer</h2>
+    <div class="steps-info">
+      <ol>
+        <li><b>Kirim bukti transfer</b> ke WhatsApp admin (klik tombol di bawah)</li>
+        <li>Kembali ke halaman ini & klik <b>"Saya Sudah Bayar"</b></li>
+        <li>Tunggu admin memverifikasi pembayaran Anda</li>
+        <li>Anda akan menerima notifikasi WhatsApp setelah disetujui</li>
+      </ol>
+    </div>
+    <a id="btnWA" href="#" target="_blank" class="btn-wa" style="margin-top:16px;">
+      📱 Konfirmasi & Kirim Bukti ke Admin
+    </a>
+    <button class="btn-primary" id="btnSudahBayar" onclick="sudahBayar()">
+      ✅ Saya Sudah Bayar
+    </button>
+    <a href="dashboard-wali.html" class="btn-secondary">← Kembali ke Dashboard</a>
+  </div>
+</div>
+
+<!-- ===== MODAL POP-UP SUKSES ===== -->
+<div class="modal-overlay" id="modalSukses">
+  <div class="modal-popup">
+    <div class="modal-icon">✅</div>
+    <h3>Alhamdulillah!</h3>
+    <p>Pendaftaran ananda telah <b>diverifikasi admin</b>.<br>
+    Silakan mulai belajar sesuai jadwal.</p>
+    <div class="modal-info">
+      <div class="row"><span>Kode</span><b id="mKode">-</b></div>
+      <div class="row"><span>Santri</span><b id="mSantri">-</b></div>
+      <div class="row"><span>Paket</span><b id="mPaket">-</b></div>
+      <div class="row"><span>Sesi</span><b id="mSesi">-</b></div>
+    </div>
+    <div class="modal-actions">
+      <a href="dashboard-wali.html" class="modal-btn primary">📊 Lihat Dashboard</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL POP-UP BATAL ===== -->
+<div class="modal-overlay" id="modalBatal">
+  <div class="modal-popup">
+    <div class="modal-icon">😔</div>
+    <h3>Pendaftaran Dibatalkan</h3>
+    <p>Maaf, pendaftaran ananda <b>tidak dapat dilanjutkan</b>.</p>
+    <div class="modal-info">
+      <div class="row"><span>Kode</span><b id="bKode">-</b></div>
+      <div class="row"><span>Alasan</span><b id="bAlasan">-</b></div>
+    </div>
+    <p style="font-size:13px;margin-top:16px;">Silakan hubungi admin untuk info lebih lanjut.</p>
+    <div class="modal-actions">
+      <a href="https://wa.me/6289529999351?text=Assalamu'alaikum%20Admin%20Les%20Alfadhl,%20saya%20ingin%20bertanya%20tentang%20pendaftaran%20ananda" 
+         target="_blank" class="modal-btn wa">💬 Hubungi Admin</a>
+      <button class="modal-btn outline" onclick="closeModal('modalBatal')">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec'; // ⚠️ GANTI dengan URL Anda
+const ADMIN_WA = '6289529999351';
+
+let token = null;
+let user = null;
+let kode = null;
+let batasLock = null;
+let timerInterval = null;
+let statusSudahBayar = false;
+let metodeDipilih = 'Cash';
+
+let popupSudahMuncul = { sukses: false, batal: false };
+
+// ===== AUTH HELPER =====
+function getAuth() {
+  return {
+    token: sessionStorage.getItem('token') || localStorage.getItem('token'),
+    user: JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user') || 'null')
+  };
+}
+
+function clearAuth() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  sessionStorage.removeItem('token');
+  sessionStorage.removeItem('user');
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', async () => {
+  const auth = getAuth();
+  user = auth.user;
+  token = auth.token;
+  
+  if (!user || user.role !== 'wali') { 
+    window.location.href = 'login.html'; 
+    return; 
+  }
+
+  const url = new URLSearchParams(window.location.search);
+  kode = url.get('kode') || sessionStorage.getItem('kodeDaftar');
+  if (!kode) { 
+    window.location.href = 'daftar.html'; 
+    return; 
+  }
+  
+  const kodeEl = document.getElementById('kodeTxt');
+  if (kodeEl) kodeEl.textContent = kode;
+  const dKodeEl = document.getElementById('dKode');
+  if (dKodeEl) dKodeEl.textContent = kode;
+  
+  const mKodeEl = document.getElementById('mKode');
+  if (mKodeEl) mKodeEl.textContent = kode;
+  const bKodeEl = document.getElementById('bKode');
+  if (bKodeEl) bKodeEl.textContent = kode;
+
+  await cekStatus();
+  setupWAButton();
+});
+
+// ===== CEK STATUS =====
+async function cekStatus() {
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST',
+      body:JSON.stringify({ action:'cekStatus', token, kode }),
+      headers:{'Content-Type':'text/plain;charset=utf-8'}
+    });
+    const r = await res.json();
+    
+    if (!r.success) { 
+      showAlert('Kode tidak ditemukan', 'error'); 
+      return; 
+    }
+
+    if (r.status === 'Menunggu Pembayaran') {
+      const jumlah = Number(sessionStorage.getItem('jumlah') || 0);
+      const dTotalEl = document.getElementById('dTotal');
+      if (dTotalEl) dTotalEl.textContent = 'Rp ' + jumlah.toLocaleString('id-ID');
+      batasLock = new Date(r.batasLock).getTime();
+      startTimer();
+    } else if (r.status === 'Menunggu Konfirmasi') {
+      showStatusKonfirmasi();
+    } else if (r.status === 'Kedaluwarsa') {
+      showStatusKedaluwarsa();
+    } else if (r.status === 'Terdaftar') {
+      showStatusTerdaftar();
+      // ✅ Pop-up sukses
+      if (!popupSudahMuncul.sukses) {
+        popupSudahMuncul.sukses = true;
+        tampilPopupSukses();
+      }
+    } else if (r.status === 'Batal') {
+      showStatusBatal(r.catatanAdmin);
+      // ✅ Pop-up batal
+      if (!popupSudahMuncul.batal) {
+        popupSudahMuncul.batal = true;
+        tampilPopupBatal(r.catatanAdmin);
+      }
+    }
+  } catch (e) {
+    console.error('cekStatus error:', e);
+    showAlert('Gagal memuat status: ' + e.message, 'error');
+  }
+}
+
+// ===== POP-UP SUKSES =====
+function tampilPopupSukses() {
+  const jumlah = Number(sessionStorage.getItem('jumlah') || 0);
+  const mSantri = document.getElementById('mSantri');
+  if (mSantri) mSantri.textContent = user.nama || '-';
+  
+  // Ambil detail dari riwayat? Kita fetch cepat via cekStatus sudah ada, tapi hanya kasih yang statis
+  // Bisa juga pakai sessionStorage
+  const dataPendaftaran = JSON.parse(sessionStorage.getItem('dataPendaftaran') || 'null');
+  if (dataPendaftaran) {
+    const mPaket = document.getElementById('mPaket');
+    if (mPaket) mPaket.textContent = dataPendaftaran.paket || '-';
+    const mSesi = document.getElementById('mSesi');
+    if (mSesi) mSesi.textContent = dataPendaftaran.sesi || '-';
+  }
+  
+  const modal = document.getElementById('modalSukses');
+  if (modal) modal.classList.add('show');
+}
+
+// ===== POP-UP BATAL =====
+function tampilPopupBatal(alasan) {
+  const bAlasan = document.getElementById('bAlasan');
+  if (bAlasan) bAlasan.textContent = alasan || 'Tidak disebutkan';
+  
+  const modal = document.getElementById('modalBatal');
+  if (modal) modal.classList.add('show');
+}
+
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.classList.remove('show');
+}
+
+// ===== TIMER =====
+function startTimer() {
+  updateTimer();
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  const now = Date.now();
+  const sisa = batasLock - now;
+
+  if (sisa <= 0) {
+    clearInterval(timerInterval);
+    showStatusKedaluwarsa();
+    return;
+  }
+
+  const menit = Math.floor(sisa / 60000);
+  const detik = Math.floor((sisa % 60000) / 1000);
+  const clock = document.getElementById('timerClock');
+  if (clock) {
+    clock.textContent = String(menit).padStart(2,'0') + ':' + String(detik).padStart(2,'0');
+  }
+
+  const box = document.getElementById('timerBox');
+  if (box) {
+    box.className = 'timer-box';
+    if (sisa < 120000) box.classList.add('danger');
+    else if (sisa < 300000) box.classList.add('warning');
+  }
+}
+
+// ===== WA BUTTON =====
+function setupWAButton() {
+  const jumlah = Number(sessionStorage.getItem('jumlah') || 0);
+  const pesan = `Assalamu'alaikum Admin Les Alfadhl,
+
+Saya *${user.nama}* ingin konfirmasi pembayaran.
+
+📋 Kode Daftar: *${kode}*
+💰 Total: *Rp ${jumlah.toLocaleString('id-ID')}*
+💳 Metode: *${metodeDipilih}*
+
+Bukti transfer saya lampirkan di chat ini.
+
+Mohon segera diverifikasi. Terima kasih 🙏`;
+  const btnWA = document.getElementById('btnWA');
+  if (btnWA) {
+    btnWA.href = 'https://wa.me/' + ADMIN_WA + '?text=' + encodeURIComponent(pesan);
+  }
+}
+
+// ===== SUDAH BAYAR =====
+async function sudahBayar() {
+  if (statusSudahBayar) return;
+  
+  if (!metodeDipilih) {
+    showAlert('Silakan pilih metode pembayaran terlebih dahulu (Cash / QRIS / DANA / SeaBank)', 'error');
+    return;
+  }
+  
+  if (!confirm('Anda memilih metode: ' + metodeDipilih + '\n\nPastikan Anda sudah transfer & kirim bukti ke admin.\n\nLanjutkan?')) return;
+
+  const btn = document.getElementById('btnSudahBayar');
+  if (!btn) return;
+  btn.disabled = true;
+  btn.textContent = 'Memproses...';
+
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST',
+      body:JSON.stringify({ 
+        action: 'konfirmasiBayar', 
+        token, 
+        kode,
+        metode: metodeDipilih
+      }),
+      headers:{'Content-Type':'text/plain;charset=utf-8'}
+    });
+    const r = await res.json();
+    if (!r.success) {
+      btn.disabled = false;
+      btn.textContent = '✅ Saya Sudah Bayar';
+      showAlert(r.message || 'Gagal', 'error');
+      cekStatus();
+      return;
+    }
+    statusSudahBayar = true;
+    clearInterval(timerInterval);
+    showStatusKonfirmasi();
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = '✅ Saya Sudah Bayar';
+    showAlert('Kesalahan: ' + e.message, 'error');
+  }
+}
+
+// ===== STATUS TAMPILAN =====
+function showStatusKonfirmasi() {
+  clearInterval(timerInterval);
+  const box = document.getElementById('timerBox');
+  if (box) {
+    box.outerHTML =
+      '<div class="status-bar confirm">⏳ <b>Menunggu Konfirmasi Admin</b><br><span style="font-weight:400;font-size:12px;opacity:.85;">Slot Anda telah terkunci. Admin akan segera memverifikasi pembayaran.</span></div>';
+  }
+  const btn = document.getElementById('btnSudahBayar');
+  if (btn) { 
+    btn.disabled = true; 
+    btn.textContent = '⏳ Menunggu Konfirmasi Admin'; 
+    btn.style.background = '#7a8a7d'; 
+  }
+  const wa = document.getElementById('btnWA');
+  if (wa) wa.textContent = '📱 Chat Admin (opsional)';
+}
+
+function showStatusKedaluwarsa() {
+  clearInterval(timerInterval);
+  const box = document.getElementById('timerBox');
+  if (box) {
+    box.outerHTML =
+      '<div class="status-bar expired">⏰ <b>Waktu Pembayaran Habis</b><br><span style="font-weight:400;font-size:12px;">Slot Anda telah dilepas. Silakan daftar ulang dari awal.</span></div>';
+  }
+  const btn = document.getElementById('btnSudahBayar');
+  if (btn) { 
+    btn.disabled = true; 
+    btn.textContent = 'Waktu Habis'; 
+    btn.style.background = '#999'; 
+    
+    const wrap = btn.parentNode;
+    if (wrap) {
+      const a = document.createElement('a');
+      a.href = 'daftar.html';
+      a.className = 'btn-primary';
+      a.textContent = '🔄 Daftar Ulang';
+      a.style.marginTop = '10px';
+      wrap.appendChild(a);
+    }
+  }
+}
+
+function showStatusTerdaftar() {
+  clearInterval(timerInterval);
+  const box = document.getElementById('timerBox');
+  if (box) {
+    box.outerHTML =
+      '<div class="status-bar terdaftar">🎉 <b>Pendaftaran Berhasil!</b><br><span style="font-weight:400;font-size:12px;">Ananda resmi terdaftar. Notifikasi WhatsApp telah dikirim.</span></div>';
+  }
+  const btn = document.getElementById('btnSudahBayar');
+  if (btn) { 
+    btn.disabled = true; 
+    btn.textContent = '✅ Terdaftar'; 
+    btn.style.background = 'var(--hijau)'; 
+  }
+}
+
+function showStatusBatal(catatan) {
+  clearInterval(timerInterval);
+  const box = document.getElementById('timerBox');
+  if (box) {
+    box.outerHTML =
+      '<div class="status-bar expired">❌ <b>Pendaftaran Dibatalkan</b><br><span style="font-weight:400;font-size:12px;">Alasan: ' + (catatan || 'Tidak disebutkan') + '</span></div>';
+  }
+  const btn = document.getElementById('btnSudahBayar');
+  if (btn) { 
+    btn.disabled = true; 
+    btn.textContent = 'Dibatalkan'; 
+    btn.style.background = '#999'; 
+  }
+}
+
+// ===== UTIL =====
+function switchTab(id, ev) {
+  ev.preventDefault();
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  ev.target.classList.add('active');
+  const tabContent = document.getElementById('tab-' + id);
+  if (tabContent) tabContent.classList.add('active');
+  
+  if (id === 'qris') metodeDipilih = 'QRIS';
+  else if (id === 'dana') metodeDipilih = 'DANA';
+  else if (id === 'seabank') metodeDipilih = 'SeaBank';
+  
+  setupWAButton();
+}
+
+function copyText(txt) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt).then(() => {
+      showAlert('📋 Nomor berhasil disalin!', 'success');
+    }).catch(() => {
+      alert('Nomor: ' + txt);
+    });
+  } else {
+    alert('Nomor: ' + txt);
+  }
+}
+
+function showAlert(msg, type='info') {
+  const a = document.getElementById('alert');
+  if (!a) {
+    console.warn('Element #alert tidak ada, fallback alert():', msg);
+    alert(msg);
+    return;
+  }
+  a.textContent = msg;
+  a.className = 'alert ' + type;
+  a.style.display = 'block';
+  window.scrollTo({ top:0, behavior:'smooth' });
+  setTimeout(() => { a.style.display = 'none'; }, 5000);
+}
+
+// Polling tiap 15 detik (lebih cepat deteksi approve)
+setInterval(() => { 
+  if (kode && !statusSudahBayar) cekStatus();
+  else if (kode && statusSudahBayar && !popupSudahMuncul.sukses && !popupSudahMuncul.batal) cekStatus();
+}, 15000);
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { 
+    if (e.target === o) o.classList.remove('show'); 
+  });
+});
+</script>
+
+</body>
+</html>

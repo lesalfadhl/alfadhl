@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Les Alfadhl</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--hijau-tua:#2D5F3F;--hijau:#3E7B54;--hijau-muda:#7BAE7F;--krem:#F5EFE0;--krem-tua:#EADFC4;--putih:#FAFAF7;--teks:#2C3E2E;--emas:#C9A961;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--hijau-tua) 0%,var(--hijau) 40%,var(--hijau-muda) 100%);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  position:relative;overflow-x:hidden;
+}
+body::before{
+  content:'﷽';position:fixed;font-family:'Amiri',serif;
+  font-size:300px;opacity:.04;top:50%;left:50%;transform:translate(-50%,-50%);
+  color:#fff;pointer-events:none;
+}
+.card{
+  background:#fff;border-radius:24px;padding:44px 36px;max-width:440px;width:100%;
+  box-shadow:0 30px 60px rgba(0,0,0,.25);position:relative;z-index:2;
+}
+.card-header{text-align:center;margin-bottom:32px;}
+.logo-circle{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-muda));
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;font-size:36px;color:#fff;overflow:hidden;
+  box-shadow:0 8px 24px rgba(45,95,63,.3);
+}
+.logo-circle img{width:100%;height:100%;object-fit:cover;}
+.card-header h2{font-family:'Amiri',serif;font-size:28px;color:var(--hijau-tua);margin-bottom:6px;}
+.card-header p{color:#7a8a7d;font-size:14px;}
+
+.form-group{margin-bottom:18px;position:relative;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--hijau-tua);margin-bottom:6px;}
+.form-group input{
+  width:100%;padding:13px 16px;border:2px solid #e0e6e1;border-radius:12px;
+  font-size:14px;transition:.3s;outline:none;background:var(--putih);
+}
+.form-group input:focus{border-color:var(--hijau-muda);background:#fff;box-shadow:0 0 0 4px rgba(123,174,127,.12);}
+.toggle-pw{position:absolute;right:14px;top:38px;cursor:pointer;font-size:16px;color:#999;user-select:none;}
+.checkbox-row{display:flex;align-items:center;gap:8px;margin:8px 0 24px;font-size:13px;color:#5a6b5d;}
+.checkbox-row input{width:16px;height:16px;accent-color:var(--hijau);}
+.btn-submit{
+  width:100%;padding:14px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
+  color:#fff;font-weight:600;font-size:15px;cursor:pointer;transition:.3s;
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(45,95,63,.35);}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.divider{text-align:center;margin:24px 0 16px;position:relative;font-size:12px;color:#9aa79c;}
+.divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:#e0e6e1;}
+.divider span{background:#fff;padding:0 12px;position:relative;}
+.link-row{text-align:center;font-size:13px;}
+.link-row a{
+  color:var(--hijau);text-decoration:none;font-weight:600;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 18px;border-radius:10px;background:var(--krem);
+  margin-top:6px;transition:.3s;
+}
+.link-row a:hover{background:var(--krem-tua);}
+.alert{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:18px;display:none;animation:slideDown .3s;}
+.alert.error{background:#fde8e8;color:#c0392b;border-left:4px solid #e74c3c;}
+.alert.success{background:#e5f4ea;color:#2D5F3F;border-left:4px solid var(--hijau-muda);}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.back-home{text-align:center;margin-top:20px;}
+.back-home a{color:#fff;font-size:13px;opacity:.8;text-decoration:none;}
+.back-home a:hover{opacity:1;}
+@media(max-width:480px){.card{padding:32px 24px;}.card-header h2{font-size:24px;}}
+</style>
+</head>
+<body>
+
+<div>
+  <div class="card">
+    <div class="card-header">
+      <div class="logo-circle">
+        <img src="assets/logo.png" alt="Logo" onerror="this.parentNode.innerHTML='🌿'">
+      </div>
+      <h2>Login Akun</h2>
+      <p>Les Alfadhl</p>
+    </div>
+
+    <div id="alert" class="alert"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label>No WhatsApp</label>
+        <input type="tel" id="noWA" placeholder="08xxxxxxxxxx" required autocomplete="username">
+      </div>
+
+      <div class="form-group">
+        <label>Sandi</label>
+        <input type="password" id="password" placeholder="Masukkan sandi" required autocomplete="current-password">
+        <span class="toggle-pw" onclick="togglePw()">👁</span>
+      </div>
+
+      <div class="checkbox-row" id="rememberRow">
+        <input type="checkbox" id="remember">
+        <label for="remember" style="margin:0;font-weight:400;cursor:pointer;">Ingat saya selama 7 hari</label>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnLogin">Masuk</button>
+    </form>
+
+    <div class="divider"><span>atau</span></div>
+
+    <div class="link-row">
+      <div style="margin-bottom:8px;">
+        <a href="hubungi-admin.html">📱 Belum punya akun? Hubungi Admin</a>
+      </div>
+      <div>
+        <a href="https://wa.me/6289529999351?text=Assalamu'alaikum,%20saya%20lupa%20sandi%20akun%20Les%20Alfadhl" 
+           target="_blank" style="background:#e8f3eb;">🔑 Lupa sandi? Chat Admin</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="back-home">
+    <a href="index.html">← Kembali ke Beranda</a>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec'; // ⚠️ GANTI
+
+const form = document.getElementById('loginForm');
+const btnLogin = document.getElementById('btnLogin');
+const alertBox = document.getElementById('alert');
+
+function showAlert(msg, type = 'error') {
+  alertBox.textContent = msg;
+  alertBox.className = 'alert ' + type;
+  alertBox.style.display = 'block';
+  setTimeout(() => alertBox.style.display = 'none', 5000);
+}
+
+function togglePw() {
+  const inp = document.getElementById('password');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function formatWA(n) {
+  n = n.replace(/\D/g, '');
+  if (n.startsWith('0')) n = '62' + n.slice(1);
+  if (n.startsWith('8')) n = '62' + n;
+  return n;
+}
+
+// ===== AUTO REDIRECT =====
+window.addEventListener('DOMContentLoaded', () => {
+  // Cek sessionStorage dulu (admin atau wali tanpa remember)
+  let savedToken = sessionStorage.getItem('token');
+  let savedUser = JSON.parse(sessionStorage.getItem('user') || 'null');
+  
+  // Kalau tidak ada, cek localStorage (wali dengan remember me)
+  if (!savedToken) {
+    savedToken = localStorage.getItem('token');
+    savedUser = JSON.parse(localStorage.getItem('user') || 'null');
+  }
+  
+  if (savedToken && savedUser) {
+    window.location.href = savedUser.role === 'admin' ? 'admin.html' : 'dashboard-wali.html';
+  }
+});
+
+// ===== SUBMIT =====
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  btnLogin.disabled = true;
+  btnLogin.innerHTML = '<span class="spinner"></span>Memproses...';
+  
+  const noWA = formatWA(document.getElementById('noWA').value);
+  const password = document.getElementById('password').value;
+  const remember = document.getElementById('remember').checked;
+  
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'login', noWA, password, remember }),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    });
+    const result = await res.json();
+    if (!result.success) { 
+      showAlert(result.message || 'Login gagal'); 
+      return; 
+    }
+    
+    // Bersihkan storage dulu
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
+    
+    const isAdmin = result.user.role === 'admin';
+    
+    if (isAdmin) {
+      // ADMIN: selalu di sessionStorage (hilang saat tab ditutup)
+      sessionStorage.setItem('token', result.token);
+      sessionStorage.setItem('user', JSON.stringify(result.user));
+    } else if (remember) {
+      // WALI + ingat saya: localStorage 7 hari
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result.user));
+    } else {
+      // WALI tanpa remember: sessionStorage
+      sessionStorage.setItem('token', result.token);
+      sessionStorage.setItem('user', JSON.stringify(result.user));
+    }
+    
+    showAlert('Login berhasil! Mengalihkan...', 'success');
+    setTimeout(() => {
+      window.location.href = isAdmin ? 'admin.html' : 'dashboard-wali.html';
+    }, 700);
+  } catch (err) {
+    showAlert('Kesalahan jaringan: ' + err.message);
+  } finally {
+    btnLogin.disabled = false;
+    btnLogin.textContent = 'Masuk';
+  }
+});
+</script>
+
+</body>
+</html>
