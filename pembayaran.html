@@ -50,11 +50,11 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 .detail-list .row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px dashed #d5cbb0;}
 .detail-list .row:last-child{border-bottom:none;padding-top:14px;font-weight:700;font-size:16px;color:var(--hijau-tua);}
 
-.tabs{display:flex;gap:8px;margin-bottom:16px;background:var(--krem);padding:6px;border-radius:14px;}
+.tabs{display:flex;gap:8px;margin-bottom:16px;background:var(--krem);padding:6px;border-radius:14px;overflow-x:auto;}
 .tab{
-  flex:1;padding:12px;border:none;background:transparent;cursor:pointer;
+  flex:1;min-width:90px;padding:12px;border:none;background:transparent;cursor:pointer;
   font-weight:600;font-size:13px;color:var(--hijau-tua);border-radius:10px;transition:.3s;
-  font-family:'Poppins',sans-serif;
+  font-family:'Poppins',sans-serif;white-space:nowrap;
 }
 .tab.active{background:#fff;box-shadow:0 4px 12px rgba(45,95,63,.15);}
 .tab-content{display:none;text-align:center;padding:20px;background:var(--putih);border-radius:12px;}
@@ -73,7 +73,8 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
   padding:16px;margin-top:12px;
 }
 .rek-box .label{font-size:11px;letter-spacing:1px;color:#7a8a7d;text-transform:uppercase;margin-bottom:4px;}
-.rek-box .nomor{font-size:22px;font-weight:700;color:var(--hijau-tua);font-family:'Courier New',monospace;letter-spacing:1px;}
+.rek-box .nomor{font-size:18px;font-weight:700;color:var(--hijau-tua);font-family:'Courier New',monospace;letter-spacing:1px;line-height:1.4;}
+.rek-box .nomor.alamat{font-size:13px;font-family:'Poppins',sans-serif;letter-spacing:0;line-height:1.5;}
 .rek-box .an{font-size:12px;color:#7a8a7d;margin-top:4px;}
 .btn-copy{
   margin-top:10px;padding:8px 18px;background:var(--hijau);color:#fff;border:none;
@@ -130,7 +131,7 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 .status-bar.expired{background:#fde8e8;color:#c0392b;}
 .status-bar.terdaftar{background:#e5f4ea;color:var(--hijau-tua);}
 
-/* ===== MODAL POP-UP ===== */
+/* MODAL POP-UP */
 .modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;
   display:none;align-items:center;justify-content:center;padding:20px;
@@ -154,10 +155,7 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
   font-size:72px;margin-bottom:16px;display:inline-block;
   animation:bounce .8s ease infinite alternate;
 }
-@keyframes bounce{
-  from{transform:translateY(0);}
-  to{transform:translateY(-8px);}
-}
+@keyframes bounce{from{transform:translateY(0);}to{transform:translateY(-8px);}}
 .modal-popup h3{
   font-family:'Amiri',serif;color:var(--hijau-tua);
   font-size:26px;margin-bottom:12px;position:relative;z-index:2;
@@ -192,15 +190,13 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 .modal-btn.primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(45,95,63,.5);}
 .modal-btn.wa{background:#25D366;color:#fff;}
 .modal-btn.wa:hover{background:#1ea855;transform:translateY(-2px);}
-.modal-btn.outline{
-  background:var(--krem);color:var(--hijau-tua);
-}
+.modal-btn.outline{background:var(--krem);color:var(--hijau-tua);}
 .modal-btn.outline:hover{background:var(--krem-tua);}
 
 @media(max-width:600px){
   .timer-box .clock{font-size:44px;letter-spacing:2px;}
   .kode-box .kode{font-size:20px;}
-  .tab{font-size:12px;padding:10px 6px;}
+  .tab{font-size:12px;padding:10px 8px;min-width:80px;}
   .modal-popup{padding:32px 22px;}
   .modal-popup h3{font-size:22px;}
   .modal-popup .modal-icon{font-size:60px;}
@@ -234,6 +230,10 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
   <div class="card">
     <h2>📋 Detail Pendaftaran</h2>
     <div class="detail-list" id="detailList">
+      <div class="row"><span>Santri</span><b id="dSantri">-</b></div>
+      <div class="row"><span>Mapel</span><b id="dMapel">-</b></div>
+      <div class="row"><span>Paket</span><b id="dPaket">-</b></div>
+      <div class="row"><span>Sesi</span><b id="dSesi">-</b></div>
       <div class="row"><span>Kode</span><b id="dKode">-</b></div>
       <div class="row"><span>Total</span><b id="dTotal">Rp -</b></div>
     </div>
@@ -244,22 +244,20 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
     <h2>💳 Pilih Metode Pembayaran</h2>
 
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('cash', event)">💳 Cash</button>
+      <button class="tab active" onclick="switchTab('cash', event)">💵 Cash</button>
       <button class="tab" onclick="switchTab('qris', event)">🔳 QRIS</button>
       <button class="tab" onclick="switchTab('dana', event)">💙 DANA</button>
       <button class="tab" onclick="switchTab('seabank', event)">🏦 SeaBank</button>
     </div>
 
-
     <div class="tab-content active" id="tab-cash">
       <p style="font-size:13px;color:#7a8a7d;margin-bottom:4px;">Pembayaran langsung ke Admin</p>
       <div class="rek-box">
-        <div class="label">Langsung menuju alamat berikut</div>
-        <div class="nomor" id="nomorDana">Perum Citra Kebun Mas Blok D11 No.23, RT025/009, Bengle, Majalaya, Karawang Timur 41388</div>
+        <div class="label">Alamat</div>
+        <div class="nomor alamat">Perum Citra Kebun Mas Blok D11 No.23, RT025/009, Bengle, Majalaya, Karawang Timur 41388</div>
         <button class="btn-copy" onclick="copyText('Perum Citra Kebun Mas Blok D11 No.23, RT025/009, Bengle, Majalaya, Karawang Timur 41388')">📋 Salin Alamat</button>
       </div>
     </div>
-
 
     <div class="tab-content" id="tab-qris">
       <p style="font-size:13px;color:#7a8a7d;margin-bottom:12px;">Scan QR berikut dengan aplikasi apapun yang mendukung QRIS</p>
@@ -312,7 +310,7 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 <!-- ===== MODAL POP-UP SUKSES ===== -->
 <div class="modal-overlay" id="modalSukses">
   <div class="modal-popup">
-    <div class="modal-icon">✅</div>
+    <div class="modal-icon">🎉</div>
     <h3>Alhamdulillah!</h3>
     <p>Pendaftaran ananda telah <b>diverifikasi admin</b>.<br>
     Silakan mulai belajar sesuai jadwal.</p>
@@ -348,7 +346,7 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec'; // ⚠️ GANTI dengan URL Anda
+const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec';
 const ADMIN_WA = '6289529999351';
 
 let token = null;
@@ -358,6 +356,15 @@ let batasLock = null;
 let timerInterval = null;
 let statusSudahBayar = false;
 let metodeDipilih = 'Cash';
+
+// ✅ Data pendaftaran dari server (untuk popup sukses)
+let dataPendaftaran = {
+  namaSantri: '',
+  mapel: '',
+  paket: '',
+  sesi: '',
+  jumlah: 0
+};
 
 let popupSudahMuncul = { sukses: false, batal: false };
 
@@ -398,7 +405,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (kodeEl) kodeEl.textContent = kode;
   const dKodeEl = document.getElementById('dKode');
   if (dKodeEl) dKodeEl.textContent = kode;
-  
   const mKodeEl = document.getElementById('mKode');
   if (mKodeEl) mKodeEl.textContent = kode;
   const bKodeEl = document.getElementById('bKode');
@@ -423,10 +429,30 @@ async function cekStatus() {
       return; 
     }
 
+    // ✅ SELALU simpan data detail dari server
+    if (r.namaSantri) dataPendaftaran.namaSantri = r.namaSantri;
+    if (r.mapel) dataPendaftaran.mapel = r.mapel;
+    if (r.paket) dataPendaftaran.paket = r.paket;
+    if (r.sesi) dataPendaftaran.sesi = r.sesi;
+    if (r.jumlah) dataPendaftaran.jumlah = r.jumlah;
+
+    // ✅ Update tampilan detail
+    const dSantriEl = document.getElementById('dSantri');
+    if (dSantriEl) dSantriEl.textContent = dataPendaftaran.namaSantri || '-';
+    const dMapelEl = document.getElementById('dMapel');
+    if (dMapelEl) dMapelEl.textContent = dataPendaftaran.mapel || '-';
+    const dPaketEl = document.getElementById('dPaket');
+    if (dPaketEl) dPaketEl.textContent = dataPendaftaran.paket || '-';
+    const dSesiEl = document.getElementById('dSesi');
+    if (dSesiEl) dSesiEl.textContent = dataPendaftaran.sesi || '-';
+    const dTotalEl = document.getElementById('dTotal');
+    if (dTotalEl) dTotalEl.textContent = 'Rp ' + Number(dataPendaftaran.jumlah).toLocaleString('id-ID');
+
+    // Update WA button juga (biar metode/paket selalu fresh)
+    setupWAButton();
+
+    // Handle status
     if (r.status === 'Menunggu Pembayaran') {
-      const jumlah = Number(sessionStorage.getItem('jumlah') || 0);
-      const dTotalEl = document.getElementById('dTotal');
-      if (dTotalEl) dTotalEl.textContent = 'Rp ' + jumlah.toLocaleString('id-ID');
       batasLock = new Date(r.batasLock).getTime();
       startTimer();
     } else if (r.status === 'Menunggu Konfirmasi') {
@@ -456,19 +482,15 @@ async function cekStatus() {
 
 // ===== POP-UP SUKSES =====
 function tampilPopupSukses() {
-  const jumlah = Number(sessionStorage.getItem('jumlah') || 0);
+  // Isi data dari variabel global (sudah diisi saat cekStatus)
   const mSantri = document.getElementById('mSantri');
-  if (mSantri) mSantri.textContent = user.nama || '-';
+  if (mSantri) mSantri.textContent = dataPendaftaran.namaSantri || '-';
   
-  // Ambil detail dari riwayat? Kita fetch cepat via cekStatus sudah ada, tapi hanya kasih yang statis
-  // Bisa juga pakai sessionStorage
-  const dataPendaftaran = JSON.parse(sessionStorage.getItem('dataPendaftaran') || 'null');
-  if (dataPendaftaran) {
-    const mPaket = document.getElementById('mPaket');
-    if (mPaket) mPaket.textContent = dataPendaftaran.paket || '-';
-    const mSesi = document.getElementById('mSesi');
-    if (mSesi) mSesi.textContent = dataPendaftaran.sesi || '-';
-  }
+  const mPaket = document.getElementById('mPaket');
+  if (mPaket) mPaket.textContent = dataPendaftaran.paket || '-';
+  
+  const mSesi = document.getElementById('mSesi');
+  if (mSesi) mSesi.textContent = dataPendaftaran.sesi || '-';
   
   const modal = document.getElementById('modalSukses');
   if (modal) modal.classList.add('show');
@@ -522,12 +544,16 @@ function updateTimer() {
 
 // ===== WA BUTTON =====
 function setupWAButton() {
-  const jumlah = Number(sessionStorage.getItem('jumlah') || 0);
+  const jumlah = Number(dataPendaftaran.jumlah || 0);
   const pesan = `Assalamu'alaikum Admin Les Alfadhl,
 
 Saya *${user.nama}* ingin konfirmasi pembayaran.
 
 📋 Kode Daftar: *${kode}*
+👦 Santri: ${dataPendaftaran.namaSantri || '-'}
+📚 Mapel: ${dataPendaftaran.mapel || '-'}
+📦 Paket: ${dataPendaftaran.paket || '-'}
+⏰ Sesi: ${dataPendaftaran.sesi || '-'}
 💰 Total: *Rp ${jumlah.toLocaleString('id-ID')}*
 💳 Metode: *${metodeDipilih}*
 
@@ -545,7 +571,7 @@ async function sudahBayar() {
   if (statusSudahBayar) return;
   
   if (!metodeDipilih) {
-    showAlert('Silakan pilih metode pembayaran terlebih dahulu (Cash / QRIS / DANA / SeaBank)', 'error');
+    showAlert('Silakan pilih metode pembayaran terlebih dahulu', 'error');
     return;
   }
   
@@ -667,7 +693,8 @@ function switchTab(id, ev) {
   const tabContent = document.getElementById('tab-' + id);
   if (tabContent) tabContent.classList.add('active');
   
-  if (id === 'qris') metodeDipilih = 'QRIS';
+  if (id === 'cash') metodeDipilih = 'Cash';
+  else if (id === 'qris') metodeDipilih = 'QRIS';
   else if (id === 'dana') metodeDipilih = 'DANA';
   else if (id === 'seabank') metodeDipilih = 'SeaBank';
   
@@ -677,19 +704,19 @@ function switchTab(id, ev) {
 function copyText(txt) {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(txt).then(() => {
-      showAlert('📋 Nomor berhasil disalin!', 'success');
+      showAlert('📋 Berhasil disalin!', 'success');
     }).catch(() => {
-      alert('Nomor: ' + txt);
+      alert('Salin manual: ' + txt);
     });
   } else {
-    alert('Nomor: ' + txt);
+    alert('Salin manual: ' + txt);
   }
 }
 
 function showAlert(msg, type='info') {
   const a = document.getElementById('alert');
   if (!a) {
-    console.warn('Element #alert tidak ada, fallback alert():', msg);
+    console.warn('Element #alert tidak ada:', msg);
     alert(msg);
     return;
   }
@@ -700,7 +727,7 @@ function showAlert(msg, type='info') {
   setTimeout(() => { a.style.display = 'none'; }, 5000);
 }
 
-// Polling tiap 15 detik (lebih cepat deteksi approve)
+// Polling tiap 15 detik
 setInterval(() => { 
   if (kode && !statusSudahBayar) cekStatus();
   else if (kode && statusSudahBayar && !popupSudahMuncul.sukses && !popupSudahMuncul.batal) cekStatus();
