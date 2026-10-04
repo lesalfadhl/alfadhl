@@ -8,46 +8,86 @@
 <style>
 :root{--hijau-tua:#2D5F3F;--hijau:#3E7B54;--hijau-muda:#7BAE7F;--krem:#F5EFE0;--krem-tua:#EADFC4;--putih:#FAFAF7;--teks:#2C3E2E;--emas:#C9A961;}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;padding:20px;}
-.wrap{max-width:900px;margin:0 auto;}
+body{background:var(--putih);color:var(--teks);line-height:1.6;padding:0 0 40px;}
 
-.topbar{
+/* ===== NAVBAR ===== */
+nav{
+  position:sticky;top:0;z-index:100;
   background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
-  color:#fff;padding:16px 24px;border-radius:20px;
-  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
-  margin-bottom:20px;box-shadow:0 8px 24px rgba(45,95,63,.2);
+  padding:14px 5%;
+  display:flex;justify-content:space-between;align-items:center;
+  box-shadow:0 2px 20px rgba(0,0,0,.1);
+  margin-bottom:20px;
 }
-.topbar .brand-area{display:flex;align-items:center;gap:12px;}
-.topbar .brand-area img{
-  height:48px;width:48px;object-fit:cover;border-radius:50%;
-  background:#fff;padding:3px;border:2px solid var(--emas);
-}
-.topbar h1{font-family:'Amiri',serif;font-size:20px;margin-bottom:2px;line-height:1.2;}
-.topbar .sub{font-size:12px;opacity:.9;}
-.topbar .actions{display:flex;gap:8px;flex-wrap:wrap;}
-.topbar .actions a{
-  color:#fff;text-decoration:none;font-size:13px;padding:8px 16px;
-  border-radius:20px;background:rgba(255,255,255,.15);transition:.3s;
-  display:inline-flex;align-items:center;gap:6px;
-}
-.topbar .actions a:hover{background:rgba(255,255,255,.25);}
-.topbar .actions a.primary{background:var(--emas);color:var(--hijau-tua);font-weight:600;}
+.nav-brand{display:flex;align-items:center;gap:10px;color:#fff;}
+.nav-brand img{height:40px;width:40px;object-fit:cover;border-radius:50%;background:#fff;padding:3px;}
+.nav-brand-text h1{font-family:'Amiri',serif;font-size:22px;line-height:1;}
+.nav-brand-text small{font-size:11px;opacity:.85;}
+.nav-menu{display:flex;gap:8px;align-items:center;}
+.nav-menu a{color:#fff;padding:8px 16px;border-radius:20px;font-size:14px;transition:.3s;text-decoration:none;}
+.nav-menu a:hover{background:rgba(255,255,255,.15);}
+.nav-menu a.active{background:rgba(255,255,255,.25);font-weight:600;}
+.btn-user{background:var(--emas)!important;color:var(--hijau-tua)!important;font-weight:600;}
+.hamburger{display:none;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;padding:8px 12px;border-radius:10px;cursor:pointer;line-height:1;}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;}
+.mobile-menu.show{display:block;animation:fadeInMenu .2s;}
+@keyframes fadeInMenu{from{opacity:0;}to{opacity:1;}}
+.mobile-menu-inner{background:#fff;position:absolute;top:0;right:0;width:280px;max-width:85%;height:100%;padding:60px 20px 20px;box-shadow:-8px 0 30px rgba(0,0,0,.2);overflow-y:auto;animation:slideInMenu .3s;}
+@keyframes slideInMenu{from{transform:translateX(100%);}to{transform:translateX(0);}}
+.mobile-menu-close{position:absolute;top:16px;right:16px;background:var(--krem);border:none;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;color:var(--hijau-tua);display:flex;align-items:center;justify-content:center;}
+.mobile-menu-inner a{display:flex;align-items:center;gap:10px;padding:14px 18px;margin-bottom:6px;border-radius:12px;color:var(--hijau-tua);font-size:15px;font-weight:500;text-decoration:none;transition:.3s;}
+.mobile-menu-inner a:hover{background:var(--krem);}
+.mobile-menu-inner a.btn-user{background:linear-gradient(135deg,var(--emas),#d4b56d);color:var(--hijau-tua)!important;justify-content:center;margin-top:16px;font-weight:600;}
+.mobile-brand{display:flex;align-items:center;gap:10px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid #eee;}
+.mobile-brand img{height:40px;width:40px;border-radius:50%;background:#fff;padding:2px;object-fit:cover;}
+.mobile-brand-text h1{font-family:'Amiri',serif;font-size:20px;color:var(--hijau-tua);line-height:1;}
+.mobile-brand-text small{font-size:11px;color:#7a8a7d;}
 
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px;}
-.stat{
-  background:#fff;border-radius:16px;padding:22px;
-  box-shadow:0 4px 16px rgba(45,95,63,.08);
-  border-left:4px solid var(--hijau);
-  display:flex;align-items:center;gap:16px;
+/* ===== WRAP ===== */
+.wrap{max-width:1100px;margin:0 auto;padding:0 5%;}
+
+/* ===== WELCOME BANNER ===== */
+.welcome-banner{
+  background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-muda));
+  color:#fff;padding:24px 28px;border-radius:20px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;margin-bottom:20px;
+  box-shadow:0 8px 24px rgba(45,95,63,.2);
 }
+.welcome-banner .text h1{font-family:'Amiri',serif;font-size:22px;margin-bottom:4px;}
+.welcome-banner .text .sub{font-size:13px;opacity:.9;}
+.welcome-banner .actions{display:flex;gap:8px;flex-wrap:wrap;}
+.welcome-banner .actions a{
+  color:#fff;text-decoration:none;font-size:13px;padding:10px 18px;
+  border-radius:20px;background:rgba(255,255,255,.15);transition:.3s;
+  display:inline-flex;align-items:center;gap:6px;font-weight:500;
+}
+.welcome-banner .actions a:hover{background:rgba(255,255,255,.25);}
+.welcome-banner .actions a.primary{background:var(--emas);color:var(--hijau-tua);font-weight:600;}
+
+/* ===== STATS ===== */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px;}
+.stat{background:#fff;border-radius:16px;padding:22px;box-shadow:0 4px 16px rgba(45,95,63,.08);border-left:4px solid var(--hijau);display:flex;align-items:center;gap:16px;}
 .stat .icon{font-size:36px;line-height:1;}
 .stat .info .num{font-size:28px;font-weight:700;color:var(--hijau-tua);line-height:1;}
 .stat .info .lbl{font-size:12px;color:#7a8a7d;margin-top:4px;}
 
+/* ===== CARD ===== */
 .card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(45,95,63,.08);margin-bottom:20px;}
-.card h2{font-family:'Amiri',serif;color:var(--hijau-tua);font-size:20px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.card h2{font-family:'Amiri',serif;color:var(--hijau-tua);font-size:20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.card h2 .live-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#e5f4ea;color:var(--hijau-tua);
+  padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;
+  font-family:'Poppins',sans-serif;
+}
+.card h2 .live-badge .dot{
+  width:7px;height:7px;border-radius:50%;background:#27ae60;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
-/* Info Santri Aktif */
+/* ===== INFO SANTRI AKTIF ===== */
 .santri-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
 .santri-card{
   background:linear-gradient(135deg,#f0f7f1,#fff);
@@ -55,46 +95,83 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
   border-radius:16px;padding:18px;position:relative;
   transition:.3s;
 }
-.santri-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 8px 20px rgba(45,95,63,.15);
-  border-color:var(--hijau);
+.santri-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(45,95,63,.15);border-color:var(--hijau);}
+.santri-card::before{content:'🎓';position:absolute;top:12px;right:14px;font-size:22px;opacity:.35;}
+.santri-card h4{color:var(--hijau-tua);font-size:16px;margin-bottom:10px;padding-right:30px;}
+.santri-card .detail-row{display:flex;gap:8px;font-size:12px;padding:4px 0;}
+.santri-card .detail-row .label{color:#7a8a7d;min-width:60px;}
+.santri-card .detail-row .val{color:var(--hijau-tua);font-weight:600;flex:1;}
+.santri-card .badge-status{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:#e5f4ea;color:var(--hijau-tua);}
+
+/* ===== TAB PAKET ===== */
+.tab-paket{
+  display:flex;gap:8px;margin-bottom:16px;background:var(--krem);
+  padding:6px;border-radius:14px;overflow-x:auto;
 }
-.santri-card::before{
-  content:'🎓';position:absolute;top:12px;right:14px;
-  font-size:22px;opacity:.35;
+.tab-paket button{
+  flex:1;min-width:120px;padding:10px 14px;border:none;border-radius:10px;
+  background:transparent;cursor:pointer;transition:.3s;
+  font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;
+  color:var(--hijau-tua);text-align:center;white-space:nowrap;
 }
-.santri-card h4{
-  color:var(--hijau-tua);font-size:16px;margin-bottom:10px;
-  padding-right:30px;
+.tab-paket button.active{
+  background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
+  color:#fff;box-shadow:0 4px 12px rgba(45,95,63,.25);
 }
-.santri-card .detail-row{
-  display:flex;gap:8px;font-size:12px;padding:4px 0;
+.tab-paket button .tab-sub{display:block;font-size:10px;font-weight:400;opacity:.75;margin-top:2px;}
+
+/* ===== GRID JADWAL ===== */
+.jadwal-wrap{overflow-x:auto;border-radius:14px;border:1px solid #e0e6e1;background:#fff;}
+table.jadwal{border-collapse:collapse;width:100%;min-width:640px;font-size:12px;background:#fff;}
+table.jadwal th,table.jadwal td{border:1px solid #e0e6e1;text-align:center;vertical-align:middle;padding:0;}
+table.jadwal th{background:var(--hijau-tua);color:#fff;font-weight:600;font-size:12px;padding:10px 6px;}
+table.jadwal th.kolom-hari{background:var(--hijau);}
+table.jadwal td.sesi-label{
+  background:var(--krem);font-weight:600;color:var(--hijau-tua);
+  text-align:left;padding:8px 10px;font-size:11px;min-width:110px;line-height:1.3;
 }
-.santri-card .detail-row .label{
-  color:#7a8a7d;min-width:60px;
+table.jadwal td.sesi-label .num{font-size:10px;opacity:.7;display:block;}
+
+td.slot-pair{padding:4px !important;}
+.slot-row{display:flex;gap:3px;}
+.slot-cell{
+  flex:1;min-height:42px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;text-align:center;
+  transition:.2s;padding:3px 2px;line-height:1.15;
+  border:2px solid transparent;overflow:hidden;word-break:break-word;
 }
-.santri-card .detail-row .val{
-  color:var(--hijau-tua);font-weight:600;flex:1;
+.slot-cell.kosong{background:#e8f5ea;color:var(--hijau);border-color:#c8e2cd;font-size:11px;}
+.slot-cell.terisi{background:#fff8e1;color:#8a6d00;border-color:#e0c26b;font-size:9px;}
+.slot-cell.penuh{background:#fde8e8;color:#c0392b;border-color:#e88b8b;font-size:9px;}
+/* ✨ Slot milik anak sendiri — warna emas mencolok */
+.slot-cell.anak-sendiri{
+  background:linear-gradient(135deg,var(--emas),#e0c26b);
+  color:var(--hijau-tua);border-color:var(--hijau-tua);
+  font-weight:700;font-size:9px;
+  box-shadow:0 0 0 2px var(--hijau-tua) inset;
+  animation:highlightAnak 2s infinite;
 }
-.santri-card .badge-status{
-  display:inline-block;margin-top:10px;padding:4px 12px;
-  border-radius:20px;font-size:11px;font-weight:600;
-  background:#e5f4ea;color:var(--hijau-tua);
+@keyframes highlightAnak{
+  0%,100%{box-shadow:0 0 0 2px var(--hijau-tua) inset, 0 0 0 0 rgba(201,169,97,.6);}
+  50%{box-shadow:0 0 0 2px var(--hijau-tua) inset, 0 0 0 6px rgba(201,169,97,0);}
 }
 
-.riwayat-item{
-  border:2px solid #e0e6e1;border-radius:14px;padding:16px;
-  margin-bottom:12px;transition:.3s;background:#fff;
-}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:#5a6b5d;}
+.legend span{display:inline-flex;align-items:center;gap:6px;}
+.legend .dot-sq{width:14px;height:14px;border-radius:4px;display:inline-block;}
+.legend .d-kosong{background:#e8f5ea;border:1px solid #c8e2cd;}
+.legend .d-sebagian{background:#fff8e1;border:1px solid #e0c26b;}
+.legend .d-penuh{background:#fde8e8;border:1px solid #e88b8b;}
+.legend .d-anak{background:linear-gradient(135deg,var(--emas),#e0c26b);border:1px solid var(--hijau-tua);}
+
+/* ===== RIWAYAT ===== */
+.riwayat-item{border:2px solid #e0e6e1;border-radius:14px;padding:16px;margin-bottom:12px;transition:.3s;background:#fff;}
 .riwayat-item:hover{border-color:var(--hijau-muda);}
 .riwayat-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
 .riwayat-head h4{color:var(--hijau-tua);font-size:15px;}
 .riwayat-head .kode{font-family:'Courier New',monospace;font-size:12px;color:#7a8a7d;}
-.badge{
-  display:inline-block;padding:4px 12px;border-radius:20px;
-  font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;
-}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
 .badge.menunggu-bayar{background:#fff8e1;color:#a67c00;}
 .badge.menunggu-konfirmasi{background:#e7f3ff;color:#0056b3;}
 .badge.terdaftar{background:#e5f4ea;color:var(--hijau-tua);}
@@ -115,12 +192,10 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 .btn-sm.outline:hover{background:var(--krem);}
 .btn-sm.danger{background:#fde8e8;color:#c0392b;}
 
-.empty{
-  text-align:center;padding:40px 20px;color:#999;
-}
+/* ===== EMPTY ===== */
+.empty{text-align:center;padding:40px 20px;color:#999;}
 .empty .icon{font-size:60px;margin-bottom:12px;opacity:.5;}
 .empty p{font-size:14px;margin-bottom:16px;}
-
 .btn-primary{
   display:inline-block;padding:14px 28px;border-radius:30px;
   background:linear-gradient(135deg,var(--hijau-tua),var(--hijau));
@@ -133,37 +208,79 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 .spinner{display:inline-block;width:20px;height:20px;border:3px solid var(--krem-tua);border-top-color:var(--hijau);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
-@media(max-width:600px){
-  .riwayat-detail{grid-template-columns:1fr;}
-  .topbar{padding:14px;}
-  .topbar .brand-area img{height:40px;width:40px;}
-  .topbar h1{font-size:16px;}
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .nav-brand-text small{display:none;}
+  .nav-menu{display:none;}
+  .hamburger{display:block;}
+  .welcome-banner{padding:20px 18px;}
+  .welcome-banner .text h1{font-size:18px;}
+  .welcome-banner .actions a{padding:8px 14px;font-size:12px;}
   .card{padding:18px;}
   .santri-grid{grid-template-columns:1fr;}
+  .riwayat-detail{grid-template-columns:1fr;}
+  table.jadwal{min-width:700px;}
+  .tab-paket button{min-width:100px;font-size:11px;padding:8px 10px;}
 }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <div class="topbar">
-    <div class="brand-area">
-      <img src="assets/logo.png" alt="Logo Les Alfadhl" 
-           onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🌿%3C/text%3E%3C/svg%3E'">
-      <div>
-        <h1>Ahlan wa Sahlan, <span id="namaUser">...</span></h1>
-        <div class="sub">Dashboard Wali Santri • Les Alfadhl</div>
+<!-- ===== NAVBAR ===== -->
+<nav>
+  <div class="nav-brand">
+    <img src="assets/logo.png" alt="Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🌿%3C/text%3E%3C/svg%3E'">
+    <div class="nav-brand-text">
+      <h1>Les Alfadhl</h1>
+      <small>Al-Qur'an & Bahasa Arab</small>
+    </div>
+  </div>
+  
+  <div class="nav-menu">
+    <a href="index.html">Beranda</a>
+    <a href="jadwal.html">📅 Jadwal</a>
+    <a href="daftar.html">📝 Daftar Les</a>
+    <a href="#" class="btn-user" id="btnUserNav" onclick="toggleDropdownUser(event)">👤 Wali</a>
+  </div>
+  
+  <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Buka menu">☰</button>
+</nav>
+
+<!-- ===== MOBILE MENU ===== -->
+<div class="mobile-menu" id="mobileMenu" onclick="if(event.target.id==='mobileMenu')closeMobileMenu()">
+  <div class="mobile-menu-inner">
+    <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+    
+    <div class="mobile-brand">
+      <img src="assets/logo.png" alt="Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🌿%3C/text%3E%3C/svg%3E'">
+      <div class="mobile-brand-text">
+        <h1>Les Alfadhl</h1>
+        <small>Al-Qur'an & Bahasa Arab</small>
       </div>
     </div>
+    
+    <a href="index.html">🏠 Beranda</a>
+    <a href="jadwal.html">📅 Jadwal Les</a>
+    <a href="daftar.html">📝 Daftar Les</a>
+    <a href="#" onclick="logout()">🚪 Logout</a>
+  </div>
+</div>
 
+<!-- ===== WRAP ===== -->
+<div class="wrap">
+  <!-- WELCOME BANNER -->
+  <div class="welcome-banner">
+    <div class="text">
+      <h1>Ahlan wa Sahlan, <span id="namaUser">...</span></h1>
+      <div class="sub">Dashboard Wali Santri • Les Alfadhl</div>
+    </div>
     <div class="actions">
-      <a href="index.html" title="Beranda">🏠 Beranda</a>
       <a href="daftar.html" class="primary">+ Daftar Les</a>
       <a href="#" onclick="logout()">Logout</a>
     </div>
   </div>
 
-  <!-- STATS: Aktif & Baru -->
+  <!-- STATS -->
   <div class="stats">
     <div class="stat">
       <div class="icon">🎓</div>
@@ -189,6 +306,38 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
     </div>
   </div>
 
+  <!-- ===== JADWAL LES REAL-TIME ===== -->
+  <div class="card">
+    <h2>
+      📅 Jadwal Les Real-Time
+      <span class="live-badge"><span class="dot"></span> Live • 10s</span>
+    </h2>
+    <p style="font-size:12px;color:#7a8a7d;margin-bottom:12px;">
+      Slot berwarna <b style="color:var(--hijau-tua);background:linear-gradient(135deg,var(--emas),#e0c26b);padding:2px 8px;border-radius:6px;">emas</b> adalah jadwal ananda Anda.
+    </p>
+    
+    <div class="tab-paket" id="tabPaket">
+      <button data-paket="A" class="active">Paket A<span class="tab-sub">Ahad - Kamis</span></button>
+      <button data-paket="B">Paket B<span class="tab-sub">Senin - Rabu</span></button>
+      <button data-paket="C">Paket C<span class="tab-sub">Jum'at - Sabtu</span></button>
+      <button data-paket="D">Paket D<span class="tab-sub">Ahad & Kamis</span></button>
+    </div>
+    
+    <div class="jadwal-wrap">
+      <table class="jadwal" id="tabelJadwal">
+        <thead><tr><th>Sesi</th></tr></thead>
+        <tbody><tr><td style="padding:20px;text-align:center;color:#999;">Memuat jadwal...</td></tr></tbody>
+      </table>
+    </div>
+    
+    <div class="legend">
+      <span><span class="dot-sq d-kosong"></span> Kosong</span>
+      <span><span class="dot-sq d-sebagian"></span> Terisi (1 santri)</span>
+      <span><span class="dot-sq d-penuh"></span> Penuh (2 santri)</span>
+      <span><span class="dot-sq d-anak"></span> ✨ Anak Anda</span>
+    </div>
+  </div>
+
   <!-- RIWAYAT -->
   <div class="card">
     <h2>📋 Riwayat Pendaftaran</h2>
@@ -200,7 +349,27 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec';
+
+const PAKET_INFO = {
+  A: { hari:['Ahad','Senin','Selasa','Rabu','Kamis'], tarif:300000, label:'Ahad - Kamis' },
+  B: { hari:['Senin','Selasa','Rabu'],                 tarif:175000, label:'Senin - Rabu' },
+  C: { hari:['Jumat','Sabtu'],                         tarif:300000, label:"Jum'at & Sabtu" },
+  D: { hari:['Ahad','Kamis'],                          tarif:125000, label:'Ahad & Kamis' }
+};
+
+const SESI_LIST = [
+  '14:15 - 15:00','15:00 - 15:45','15:45 - 16:30','16:30 - 17:15',
+  'Maghrib - Isya','19:30 - 20:15','20:15 - 21:00','21:00 - 21:45','21:45 - 22:30'
+];
+const MAX_SLOT = 2;
+const REFRESH_INTERVAL = 10000;
+
 let user = null, token = null;
+let riwayatData = [];         // data riwayat (untuk deteksi anak sendiri)
+let santriAnakSaya = [];      // array nama santri aktif milik wali ini
+let jadwalData = {};
+let paketAktif = 'A';
+let refreshTimer = null;
 
 // ===== AUTH HELPER =====
 function getAuth() {
@@ -209,7 +378,6 @@ function getAuth() {
     user: JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user') || 'null')
   };
 }
-
 function clearAuth() {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
@@ -229,14 +397,25 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
   
   const ok = await verifySession();
-  if (!ok) { 
-    clearAuth();
-    window.location.href = 'login.html'; 
-    return; 
-  }
+  if (!ok) { clearAuth(); window.location.href = 'login.html'; return; }
   
   document.getElementById('namaUser').textContent = user.nama;
+  document.getElementById('btnUserNav').textContent = '👤 ' + user.nama.split(' ')[0];
+  
+  // Setup tab paket
+  document.querySelectorAll('#tabPaket button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#tabPaket button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      paketAktif = btn.dataset.paket;
+      renderJadwal();
+    });
+  });
+  
   await loadRiwayat();
+  await loadJadwal();
+  renderJadwal();
+  startAutoRefresh();
 });
 
 async function verifySession() {
@@ -253,6 +432,7 @@ async function verifySession() {
 
 function logout() {
   if (!confirm('Keluar dari akun?')) return;
+  if (refreshTimer) clearInterval(refreshTimer);
   clearAuth();
   window.location.href = 'login.html';
 }
@@ -276,14 +456,112 @@ async function loadRiwayat() {
         '<div class="empty"><p>Gagal memuat: ' + r.message + '</p></div>';
       return;
     }
-    renderRiwayat(r.data);
+    riwayatData = r.data || [];
+    // Ambil daftar nama santri aktif milik wali ini
+    santriAnakSaya = riwayatData
+      .filter(d => d.status === 'Terdaftar')
+      .map(d => d.namaSantri);
+    
+    renderRiwayat(riwayatData);
   } catch(e) {
     document.getElementById('riwayatContainer').innerHTML = 
       '<div class="empty"><p>Kesalahan: ' + e.message + '</p></div>';
   }
 }
 
-// ===== RENDER =====
+// ===== LOAD JADWAL =====
+async function loadJadwal(silent = false) {
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST',
+      body:JSON.stringify({ action:'getJadwal' }),
+      headers:{'Content-Type':'text/plain;charset=utf-8'}
+    });
+    const r = await res.json();
+    if (r.success) jadwalData = r.jadwal || {};
+  } catch(e){ 
+    if (!silent) console.error(e); 
+  }
+}
+
+// ===== AUTO REFRESH =====
+function startAutoRefresh() {
+  if (refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(async () => {
+    if (document.hidden) return;
+    await loadJadwal(true);
+    renderJadwal();
+  }, REFRESH_INTERVAL);
+}
+
+// ===== RENDER JADWAL =====
+function renderJadwal() {
+  const thead = document.querySelector('#tabelJadwal thead tr');
+  const tbody = document.querySelector('#tabelJadwal tbody');
+  tbody.innerHTML = '';
+
+  const hariList = PAKET_INFO[paketAktif].hari;
+
+  thead.innerHTML = '<th>Sesi</th>' + hariList.map(h => 
+    `<th class="kolom-hari">${h}</th>`
+  ).join('');
+
+  SESI_LIST.forEach((sesi, idx) => {
+    const tr = document.createElement('tr');
+    
+    const tdLabel = document.createElement('td');
+    tdLabel.className = 'sesi-label';
+    tdLabel.innerHTML = `<span class="num">Sesi ${idx+1}</span>${sesi}`;
+    tr.appendChild(tdLabel);
+    
+    hariList.forEach(hari => {
+      const td = document.createElement('td');
+      td.className = 'slot-pair';
+      
+      const namaList = jadwalData?.[hari]?.[sesi] || [];
+      const terisi = namaList.length;
+      
+      const slotRow = document.createElement('div');
+      slotRow.className = 'slot-row';
+      
+      for (let i = 0; i < MAX_SLOT; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'slot-cell';
+        
+        const nama = namaList[i];
+        
+        if (nama) {
+          // Cek apakah ini anak sendiri
+          const isAnakSendiri = santriAnakSaya.some(a => 
+            a.toLowerCase() === nama.toLowerCase()
+          );
+          
+          if (isAnakSendiri) {
+            slot.classList.add('anak-sendiri');
+            slot.textContent = '✨ ' + nama;
+            slot.title = 'Ini anak Anda: ' + nama;
+          } else {
+            slot.classList.add(terisi >= MAX_SLOT ? 'penuh' : 'terisi');
+            slot.textContent = nama;
+            slot.title = nama;
+          }
+        } else {
+          slot.classList.add('kosong');
+          slot.textContent = 'Kosong';
+        }
+        
+        slotRow.appendChild(slot);
+      }
+      
+      td.appendChild(slotRow);
+      tr.appendChild(td);
+    });
+    
+    tbody.appendChild(tr);
+  });
+}
+
+// ===== RENDER RIWAYAT =====
 function renderRiwayat(data) {
   const c = document.getElementById('riwayatContainer');
   const cs = document.getElementById('santriAktifContainer');
@@ -296,7 +574,6 @@ function renderRiwayat(data) {
     return;
   }
 
-  // Hitung stats
   let aktif = 0, baru = 0;
   data.forEach(d => {
     if (d.status === 'Terdaftar') aktif++;
@@ -305,7 +582,7 @@ function renderRiwayat(data) {
   document.getElementById('statAktif').textContent = aktif;
   document.getElementById('statBaru').textContent = baru;
 
-  // ===== RENDER SANTRI AKTIF =====
+  // RENDER SANTRI AKTIF
   const santriAktifList = data.filter(d => d.status === 'Terdaftar');
   if (santriAktifList.length === 0) {
     cs.innerHTML = '<div class="empty" style="padding:20px;"><div style="font-size:40px;opacity:.4;margin-bottom:8px;">🎓</div><p style="font-size:13px;">Belum ada santri aktif. Santri akan muncul di sini setelah pembayaran diverifikasi admin.</p></div>';
@@ -330,7 +607,7 @@ function renderRiwayat(data) {
     `).join('') + '</div>';
   }
 
-  // ===== RENDER RIWAYAT =====
+  // RENDER RIWAYAT
   c.innerHTML = data.map(d => {
     const badge = badgeClass(d.status);
     let actions = '';
@@ -377,6 +654,26 @@ function badgeClass(s) {
 function escapeHtml(t) {
   if (!t) return '';
   return String(t).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// ===== MOBILE MENU =====
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('show');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('show');
+}
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) closeMobileMenu();
+});
+
+// ===== DROPDOWN USER (desktop) =====
+function toggleDropdownUser(e) {
+  e.preventDefault();
+  // Sederhana: langsung logout option
+  if (confirm('Logout dari akun?')) {
+    logout();
+  }
 }
 </script>
 
