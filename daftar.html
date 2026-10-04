@@ -38,7 +38,6 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 .checkbox-item{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;padding:6px;}
 .checkbox-item input{width:16px;height:16px;accent-color:var(--hijau);}
 
-/* PAKET SELECTOR */
 .paket-selector{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
 .paket-opt{
   border:2px solid #e0e6e1;border-radius:14px;padding:16px;cursor:pointer;
@@ -51,7 +50,6 @@ body{background:var(--putih);color:var(--teks);line-height:1.6;min-height:100vh;
 .paket-opt .paket-hari{font-size:12px;color:#7a8a7d;margin-bottom:8px;}
 .paket-opt .paket-price{font-size:18px;font-weight:700;color:var(--emas);}
 
-/* ===== GRID JADWAL BARU ===== */
 .jadwal-wrap{overflow-x:auto;border-radius:14px;border:1px solid #e0e6e1;background:#fff;}
 table.jadwal{border-collapse:collapse;width:100%;min-width:640px;font-size:12px;background:#fff;}
 table.jadwal th,table.jadwal td{border:1px solid #e0e6e1;text-align:center;vertical-align:middle;padding:0;}
@@ -63,7 +61,6 @@ table.jadwal td.sesi-label{
 }
 table.jadwal td.sesi-label .num{font-size:10px;opacity:.7;display:block;}
 
-/* SUB-SLOT */
 td.slot-pair{padding:4px !important;}
 .slot-row{display:flex;gap:3px;}
 .slot-cell{
@@ -91,9 +88,15 @@ td.slot-pair{padding:4px !important;}
   color:#fff;border-color:var(--emas);
   box-shadow:0 0 0 2px var(--emas) inset;
 }
-.slot-cell.di-luar-paket{
-  background:#f4f4f4;color:#bbb;
-  border-color:#e0e0e0;cursor:not-allowed;
+.slot-cell.dipilih-bentrok{
+  background:linear-gradient(135deg,#e74c3c,#c0392b);
+  color:#fff;border-color:#a93226;
+  animation:shakeCell .5s;
+}
+@keyframes shakeCell{
+  0%,100%{transform:translateX(0);}
+  25%{transform:translateX(-3px);}
+  75%{transform:translateX(3px);}
 }
 
 .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:#5a6b5d;}
@@ -103,9 +106,7 @@ td.slot-pair{padding:4px !important;}
 .legend .d-sebagian{background:#fff8e1;border:1px solid #e0c26b;}
 .legend .d-penuh{background:#fde8e8;border:1px solid #e88b8b;}
 .legend .d-dipilih{background:linear-gradient(135deg,var(--hijau),var(--hijau-muda));}
-.legend .d-luar{background:#f4f4f4;border:1px solid #e0e0e0;}
 
-/* RINGKASAN */
 .ringkasan{
   background:linear-gradient(135deg,var(--krem),#fff);
   border:2px solid var(--krem-tua);border-radius:14px;padding:20px;
@@ -129,8 +130,8 @@ td.slot-pair{padding:4px !important;}
 .alert.error{background:#fde8e8;color:#c0392b;border-left:4px solid #e74c3c;}
 .alert.success{background:#e5f4ea;color:#2D5F3F;border-left:4px solid var(--hijau-muda);}
 .alert.info{background:#e7f3ff;color:#0056b3;border-left:4px solid #4a90e2;}
+.alert.warning{background:#fff8e1;color:#a67c00;border-left:4px solid #f0ad4e;}
 
-/* MODAL PENUH */
 .modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;
   display:none;align-items:center;justify-content:center;padding:20px;
@@ -227,6 +228,7 @@ td.slot-pair{padding:4px !important;}
       <label>Pilih Sesi * (jam yang sama tiap hari dalam paket)</label>
       <p style="font-size:12px;color:#7a8a7d;margin-bottom:10px;">
         Klik salah satu slot <b>hijau</b> pada kolom hari sesuai paket Anda. Setiap sesi punya 2 slot.
+        <br><span style="color:var(--hijau);font-weight:600;">🔄 Jadwal ter-update otomatis setiap 10 detik</span>
       </p>
       <div class="jadwal-wrap">
         <table class="jadwal" id="tabelJadwal">
@@ -239,7 +241,6 @@ td.slot-pair{padding:4px !important;}
         <span><span class="dot d-sebagian"></span> Terisi (1 orang)</span>
         <span><span class="dot d-penuh"></span> Penuh (2 orang)</span>
         <span><span class="dot d-dipilih"></span> Dipilih</span>
-        <span><span class="dot d-luar"></span> Di luar paket</span>
       </div>
     </div>
 
@@ -278,6 +279,21 @@ td.slot-pair{padding:4px !important;}
   </div>
 </div>
 
+<!-- MODAL KONFLIK SLOT -->
+<div class="modal-overlay" id="modalKonflik">
+  <div class="modal">
+    <div class="icon-big">⚠️</div>
+    <h3>Slot Baru Saja Terisi</h3>
+    <p id="modalKonflikText">
+      Maaf, slot yang Anda pilih baru saja terisi oleh pendaftar lain.<br><br>
+      Silakan pilih slot lain yang masih kosong.
+    </p>
+    <div class="btn-row">
+      <button class="btn-close" onclick="closeModalKonflik()">Pilih Slot Lain</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec';
 const ADMIN_WA = '6289529999351';
@@ -289,20 +305,19 @@ const PAKET_INFO = {
   D: { hari:['Ahad','Kamis'],                          tarif:100000, label:'Ahad & Kamis' }
 };
 
-// Daftar hari unik untuk header tabel
-const SEMUA_HARI = ['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-
 const SESI_LIST = [
   '14:15 - 15:00','15:00 - 15:45','15:45 - 16:30','16:30 - 17:15',
   'Maghrib - Isya','19:30 - 20:15','20:15 - 21:00','21:00 - 21:45','21:45 - 22:30'
 ];
 const MAX_SLOT = 2;
+const REFRESH_INTERVAL = 10000; // 10 detik
 
 let user = null;
 let token = null;
-let jadwalData = {};      // { hari: { sesi: [nama1, nama2] } }
+let jadwalData = {};
 let paketDipilih = null;
 let sesiDipilih = null;
+let refreshTimer = null;
 
 // ===== AUTH =====
 function getAuth() {
@@ -337,13 +352,13 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   setupPaketSelector();
   await loadJadwal();
+  startAutoRefresh();
   
   document.getElementById('btnDaftar').addEventListener('click', submitDaftar);
   document.getElementById('namaSantri').addEventListener('input', () => { updateRingkasan(); cekTombolDaftar(); });
   document.querySelectorAll('.checkbox-grid input').forEach(cb => 
     cb.addEventListener('change', () => { updateRingkasan(); cekTombolDaftar(); })
   );
-  document.getElementById('catatan').addEventListener('input', () => {});
 });
 
 async function verifySession() {
@@ -360,6 +375,7 @@ async function verifySession() {
 
 function logout() {
   if (!confirm('Keluar dari akun?')) return;
+  if (refreshTimer) clearInterval(refreshTimer);
   clearAuth();
   window.location.href = 'login.html';
 }
@@ -369,7 +385,7 @@ function showAlert(msg, type='info') {
   a.textContent = msg;
   a.className = 'alert ' + type;
   a.style.display = 'block';
-  setTimeout(()=>{ a.style.display='none'; }, 5000);
+  setTimeout(()=>{ a.style.display='none'; }, 6000);
 }
 
 // ===== PAKET SELECTOR =====
@@ -388,7 +404,7 @@ function setupPaketSelector() {
 }
 
 // ===== LOAD JADWAL =====
-async function loadJadwal() {
+async function loadJadwal(silent = false) {
   try {
     const res = await fetch(API_URL, {
       method:'POST',
@@ -396,8 +412,101 @@ async function loadJadwal() {
       headers:{'Content-Type':'text/plain;charset=utf-8'}
     });
     const r = await res.json();
-    if (r.success) jadwalData = r.jadwal || {};
-  } catch(e){ console.error(e); }
+    if (r.success) {
+      jadwalData = r.jadwal || {};
+      if (!silent) {
+        // Initial load — no action
+      }
+    }
+  } catch(e){ 
+    if (!silent) console.error(e); 
+  }
+}
+
+// ===== AUTO REFRESH (silent) =====
+function startAutoRefresh() {
+  if (refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(async () => {
+    // Skip kalau tab tidak aktif
+    if (document.hidden) return;
+    
+    // Simpan sesi yang dipilih sebelum refresh
+    const sesiSebelumnya = sesiDipilih;
+    
+    // Refresh data jadwal
+    await loadJadwal(true);
+    
+    // Cek konflik kalau ada sesi yang dipilih
+    if (sesiSebelumnya && paketDipilih) {
+      const konflik = cekKonflikSesi(paketDipilih, sesiSebelumnya);
+      
+      if (konflik.length > 0) {
+        // Ada konflik! Slot yang dipilih sudah terisi
+        handleKonflikSesi(konflik);
+        return;
+      }
+    }
+    
+    // Render ulang jadwal dengan data terbaru
+    if (paketDipilih) {
+      renderJadwal();
+    }
+  }, REFRESH_INTERVAL);
+}
+
+// ===== CEK KONFLIK =====
+// Return array hari yang sudah penuh di sesi terpilih
+function cekKonflikSesi(paket, sesi) {
+  const hariList = PAKET_INFO[paket].hari;
+  const hariKonflik = [];
+  
+  hariList.forEach(hari => {
+    const namaList = jadwalData?.[hari]?.[sesi] || [];
+    if (namaList.length >= MAX_SLOT) {
+      hariKonflik.push(hari);
+    }
+  });
+  
+  return hariKonflik;
+}
+
+// ===== HANDLE KONFLIK =====
+function handleKonflikSesi(hariKonflik) {
+  // Hapus pilihan sesi
+  const sesiYangHilang = sesiDipilih;
+  sesiDipilih = null;
+  
+  // Update UI
+  updateRingkasan();
+  cekTombolDaftar();
+  
+  // Render ulang jadwal (tanpa highlight "dipilih")
+  renderJadwal();
+  
+  // Highlight sel yang bentrok dengan warna merah sebentar
+  highlightBentrok(sesiYangHilang);
+  
+  // Tampilkan modal konflik
+  document.getElementById('modalKonflikText').innerHTML =
+    'Maaf, sesi <b>' + sesiYangHilang + '</b> yang Anda pilih baru saja terisi penuh di hari: <b>' + 
+    hariKonflik.join(', ') + '</b>.<br><br>' +
+    'Slot Anda otomatis dilepas. Silakan pilih slot lain yang masih kosong.';
+  document.getElementById('modalKonflik').classList.add('show');
+  
+  // Alert juga
+  showAlert('⚠️ Slot yang Anda pilih baru saja terisi. Silakan pilih slot lain.', 'warning');
+}
+
+// Highlight sel sesi yang bentrok (kedip merah)
+function highlightBentrok(sesi) {
+  setTimeout(() => {
+    document.querySelectorAll('#tabelJadwal .slot-cell').forEach(cell => {
+      if (cell.dataset.sesi === sesi && cell.classList.contains('penuh')) {
+        cell.classList.add('dipilih-bentrok');
+        setTimeout(() => cell.classList.remove('dipilih-bentrok'), 2000);
+      }
+    });
+  }, 100);
 }
 
 // ===== HELPER: Ambil daftar nama terisi di (hari, sesi) =====
@@ -405,9 +514,7 @@ function getNamaDiSlot(hari, sesi) {
   return jadwalData?.[hari]?.[sesi] || [];
 }
 
-// ===== RENDER JADWAL BARU =====
-// Orientasi: baris = sesi, kolom = hari
-// Setiap sel (hari, sesi) punya 2 sub-slot
+// ===== RENDER JADWAL =====
 function renderJadwal() {
   const thead = document.querySelector('#tabelJadwal thead tr');
   const tbody = document.querySelector('#tabelJadwal tbody');
@@ -421,22 +528,18 @@ function renderJadwal() {
 
   const hariList = PAKET_INFO[paketDipilih].hari;
 
-  // Header: Sesi | [hari yang relevan saja]
   thead.innerHTML = '<th>Sesi</th>' + hariList.map(h => 
     `<th class="kolom-hari">${h}</th>`
   ).join('');
 
-  // Baris per sesi
   SESI_LIST.forEach((sesi, idx) => {
     const tr = document.createElement('tr');
     
-    // Kolom kiri: label sesi
     const tdLabel = document.createElement('td');
     tdLabel.className = 'sesi-label';
     tdLabel.innerHTML = `<span class="num">Sesi ${idx+1}</span>${sesi}`;
     tr.appendChild(tdLabel);
     
-    // Kolom per hari
     hariList.forEach(hari => {
       const td = document.createElement('td');
       td.className = 'slot-pair';
@@ -444,7 +547,6 @@ function renderJadwal() {
       const namaList = getNamaDiSlot(hari, sesi);
       const terisi = namaList.length;
       
-      // Buat 2 sub-slot
       const slotRow = document.createElement('div');
       slotRow.className = 'slot-row';
       
@@ -455,20 +557,24 @@ function renderJadwal() {
         const nama = namaList[i];
         
         if (nama) {
-          // Slot terisi
           slot.classList.add(terisi >= MAX_SLOT ? 'penuh' : 'terisi');
           slot.textContent = nama;
           slot.title = nama;
         } else {
-          // Slot kosong → bisa dipilih
           slot.classList.add('kosong');
           slot.textContent = 'Kosong';
           slot.title = 'Klik untuk pilih sesi ini';
-          // Simpan data untuk handler
           slot.dataset.hari = hari;
           slot.dataset.sesi = sesi;
           slot.dataset.slotIndex = i;
           slot.onclick = () => pilihSlot(hari, sesi);
+        }
+        
+        // Kalau sesi ini sedang dipilih → tandai
+        if (sesiDipilih === sesi && !nama) {
+          slot.classList.remove('kosong');
+          slot.classList.add('dipilih');
+          slot.textContent = '✓';
         }
         
         slotRow.appendChild(slot);
@@ -480,16 +586,10 @@ function renderJadwal() {
     
     tbody.appendChild(tr);
   });
-
-  // Restore highlight kalau sesiDipilih masih ada
-  if (sesiDipilih) {
-    applyHighlightSesi(sesiDipilih);
-  }
 }
 
 // ===== PILIH SLOT =====
 function pilihSlot(hari, sesi) {
-  // Cek dulu apakah semua hari di sesi ini tersedia untuk paket yang dipilih
   const hariList = PAKET_INFO[paketDipilih].hari;
   let hariPenuh = [];
   
@@ -503,37 +603,10 @@ function pilihSlot(hari, sesi) {
     return;
   }
   
-  // Set sesi terpilih
   sesiDipilih = sesi;
-  
-  // Hapus semua highlight lama
-  document.querySelectorAll('#tabelJadwal .slot-cell').forEach(el => {
-    if (el.classList.contains('dipilih')) {
-      el.classList.remove('dipilih');
-      el.classList.add('kosong');
-      el.textContent = 'Kosong';
-    }
-  });
-  
-  applyHighlightSesi(sesi);
+  renderJadwal();
   updateRingkasan();
   cekTombolDaftar();
-}
-
-// Highlight semua sub-slot kosong di sesi terpilih untuk semua hari di paket
-function applyHighlightSesi(sesi) {
-  const hariList = PAKET_INFO[paketDipilih].hari;
-  
-  document.querySelectorAll('#tabelJadwal .slot-cell').forEach(cell => {
-    const cellHari = cell.dataset.hari;
-    const cellSesi = cell.dataset.sesi;
-    
-    if (cellSesi === sesi && hariList.includes(cellHari) && cell.classList.contains('kosong')) {
-      cell.classList.remove('kosong');
-      cell.classList.add('dipilih');
-      cell.textContent = '✓';
-    }
-  });
 }
 
 // ===== VALIDASI TOMBOL =====
@@ -569,7 +642,6 @@ async function submitDaftar() {
     return;
   }
 
-  // Validasi ulang (anti race condition)
   const hariList = PAKET_INFO[paketDipilih].hari;
   let hariPenuh = [];
   hariList.forEach(h => {
@@ -579,7 +651,7 @@ async function submitDaftar() {
   
   if (hariPenuh.length > 0) {
     document.getElementById('modalPenuhText').innerHTML =
-      'Maaf, sesi <b>' + sesiDipilih + '</b> pada paket <b>' + paketDipilih + '</b> sudah terisi penuh di hari: <b>' + hariPenuh.join(', ') + '</b>.<br><br>Semoga Allah memudahkan urusan kita di lain waktu. Silakan hubungi admin atau pilih sesi lain.';
+      'Maaf, sesi <b>' + sesiDipilih + '</b> pada paket <b>' + paketDipilih + '</b> sudah terisi penuh di hari: <b>' + hariPenuh.join(', ') + '</b>.<br><br>Silakan pilih sesi lain.';
     document.getElementById('modalPenuh').classList.add('show');
     return;
   }
@@ -602,8 +674,12 @@ async function submitDaftar() {
       if (r.message === 'Kelas penuh') {
         document.getElementById('modalPenuhText').innerHTML =
           (r.detail || 'Maaf, kelas untuk paket ini sudah penuh.') +
-          '<br><br>Semoga Allah memudahkan urusan kita di lain waktu. Silakan hubungi admin.';
+          '<br><br>Silakan pilih sesi lain atau hubungi admin.';
         document.getElementById('modalPenuh').classList.add('show');
+        
+        // Refresh jadwal supaya user lihat perubahan
+        await loadJadwal(true);
+        renderJadwal();
       } else if (r.message && (r.message.includes('Sesi habis') || r.message.includes('expired'))) {
         clearAuth();
         window.location.href = 'login.html';
@@ -626,6 +702,10 @@ async function submitDaftar() {
 
 function closeModal() {
   document.getElementById('modalPenuh').classList.remove('show');
+}
+
+function closeModalKonflik() {
+  document.getElementById('modalKonflik').classList.remove('show');
 }
 </script>
 
