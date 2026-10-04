@@ -237,10 +237,10 @@ td.slot-pair{padding:4px !important;}
   </div>
   
   <div class="nav-menu">
-    <a href="index.html">Beranda</a>
+    <a href="index.html">🏠 Beranda</a>
     <a href="jadwal.html">📅 Jadwal</a>
     <a href="daftar.html">📝 Daftar Les</a>
-    <a href="#" class="btn-user" id="btnUserNav" onclick="toggleDropdownUser(event)">👤 Wali</a>
+    <a href="#" class="btn-user" id="btnUserNav" onclick="toggleDropdownUser(event)">Wali</a>
   </div>
   
   <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Buka menu">☰</button>
@@ -290,10 +290,9 @@ td.slot-pair{padding:4px !important;}
       </div>
     </div>
     <div class="stat" style="border-left-color:#4a90e2;">
-      <div class="icon">🆕</div>
       <div class="info">
         <div class="num" id="statBaru" style="color:#0056b3;">0</div>
-        <div class="lbl">Santri Baru (Menunggu)</div>
+        <div class="lbl">Santri sedang mendaftar...</div>
       </div>
     </div>
   </div>
@@ -310,7 +309,7 @@ td.slot-pair{padding:4px !important;}
   <div class="card">
     <h2>
       📅 Jadwal Les Real-Time
-      <span class="live-badge"><span class="dot"></span> Live • 10s</span>
+      <span class="live-badge"><span class="dot"></span> Live</span>
     </h2>
     <p style="font-size:12px;color:#7a8a7d;margin-bottom:12px;">
       Slot berwarna <b style="color:var(--hijau-tua);background:linear-gradient(135deg,var(--emas),#e0c26b);padding:2px 8px;border-radius:6px;">emas</b> adalah jadwal ananda Anda.
@@ -400,7 +399,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (!ok) { clearAuth(); window.location.href = 'login.html'; return; }
   
   document.getElementById('namaUser').textContent = user.nama;
-  document.getElementById('btnUserNav').textContent = '👤 ' + user.nama.split(' ')[0];
+  document.getElementById('btnUserNav').textContent = 'Ahlan! ' + user.nama;
   
   // Setup tab paket
   document.querySelectorAll('#tabPaket button').forEach(btn => {
