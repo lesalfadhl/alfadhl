@@ -49,6 +49,18 @@ nav{
 .hero-mini h1{font-family:'Amiri',serif;font-size:32px;margin-bottom:8px;}
 .hero-mini p{font-size:14px;opacity:.9;}
 
+/* ✅ NEW: Petunjuk di atas tab paket */
+.petunjuk-paket{
+  display:flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#e5f4ea,#f0f7f1);
+  border-left:4px solid var(--hijau);
+  padding:14px 18px;border-radius:12px;
+  font-size:13px;color:var(--hijau-tua);
+  margin-bottom:14px;font-weight:500;
+  box-shadow:0 2px 8px rgba(45,95,63,.06);
+}
+.petunjuk-paket .icon{font-size:20px;line-height:1;}
+
 /* TAB PAKET */
 .tab-paket{
   display:flex;gap:8px;margin-bottom:20px;background:#fff;
@@ -168,6 +180,7 @@ footer p{opacity:.8;margin:4px 0;font-size:12px;}
   .card-jadwal{padding:16px;}
   table.jadwal{min-width:700px;}
   .tab-paket button{min-width:110px;padding:10px 12px;font-size:12px;}
+  .petunjuk-paket{font-size:12px;padding:12px 14px;}
 }
 </style>
 </head>
@@ -206,11 +219,16 @@ footer p{opacity:.8;margin:4px 0;font-size:12px;}
 <div class="wrap">
   <div class="hero-mini">
     <h1>📅 Jadwal Les Alfadhl</h1>
-    <p>Lihat ketersediaan jadwal secara langsung</p>
+    <p>Lihat ketersediaan jadwal les secara langsung</p>
+  </div>
+
+  <!-- ✅ Petunjuk di atas tab paket -->
+  <div class="petunjuk-paket">
+    <span class="icon">👆</span>
+    <span>Klik paket untuk melihat ketersediaan jadwal les setiap paket</span>
   </div>
 
   <div class="tab-paket" id="tabPaket">
-        <p>Klik Paket untuk melihat ketersediaan jadwal setiap paket</p>
     <button data-paket="A" class="active">
       Paket A
       <span class="tab-sub">Ahad - Kamis</span>
@@ -237,6 +255,7 @@ footer p{opacity:.8;margin:4px 0;font-size:12px;}
       </div>
       <div class="live-badge">
         <span class="dot"></span>
+        <span>Live • Update tiap 10 detik</span>
       </div>
     </div>
 
@@ -262,10 +281,11 @@ footer p{opacity:.8;margin:4px 0;font-size:12px;}
     </div>
   </div>
 
+  <!-- ✅ CTA yang berubah sesuai status login -->
   <div class="cta-box">
-    <h3>Ingin Mendaftarkan Ananda?</h3>
-    <p>Klik tombol di bawah untuk mulai mendaftar atau hubungi admin</p>
-    <a href="hubungi-admin.html" class="btn">🌿 Daftar Sekarang</a>
+    <h3 id="ctaJudul">Ingin Mendaftarkan Ananda?</h3>
+    <p id="ctaSub">Klik tombol di bawah untuk mulai mendaftar atau hubungi admin</p>
+    <a href="hubungi-admin.html" class="btn" id="btnCta">🌿 Daftar Sekarang</a>
   </div>
 </div>
 
@@ -279,10 +299,10 @@ footer p{opacity:.8;margin:4px 0;font-size:12px;}
 const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec';
 
 const PAKET_INFO = {
-  A: { hari:['Ahad','Senin','Selasa','Rabu','Kamis'], label:'Ahad - Kamis' },
-  B: { hari:['Senin','Selasa','Rabu'],                label:'Senin - Rabu' },
-  C: { hari:['Jumat','Sabtu'],                        label:"Jum'at & Sabtu" },
-  D: { hari:['Ahad','Kamis'],                         label:'Ahad & Kamis' }
+  A: { hari:['Ahad','Senin','Selasa','Rabu','Kamis'], tarif:300000, label:'Ahad - Kamis' },
+  B: { hari:['Senin','Selasa','Rabu'],                 tarif:175000, label:'Senin - Rabu' },
+  C: { hari:['Jumat','Sabtu'],                         tarif:300000, label:"Jum'at & Sabtu" },
+  D: { hari:['Ahad','Kamis'],                          tarif:125000, label:'Ahad & Kamis' }
 };
 
 const SESI_LIST = [
@@ -298,7 +318,7 @@ let refreshTimer = null;
 
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', async () => {
-  // Cek login untuk navbar
+  // Cek login untuk navbar & CTA
   cekLoginNav();
   
   // Setup tab paket
@@ -318,7 +338,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   startAutoRefresh();
 });
 
-// ===== CEK LOGIN UNTUK NAVBAR =====
+// ===== CEK LOGIN UNTUK NAVBAR & CTA =====
 function cekLoginNav() {
   try {
     const savedToken = sessionStorage.getItem('token') || localStorage.getItem('token');
@@ -326,9 +346,15 @@ function cekLoginNav() {
     
     const btnLoginNav = document.getElementById('btnLoginNav');
     const btnLoginNavMobile = document.getElementById('btnLoginNavMobile');
+    const btnCta = document.getElementById('btnCta');
+    const ctaJudul = document.getElementById('ctaJudul');
+    const ctaSub = document.getElementById('ctaSub');
     
     if (savedToken && savedUser) {
       if (savedUser.role === 'wali') {
+        // ==== WALI SUDAH LOGIN ====
+        
+        // Navbar
         if (btnLoginNav) {
           btnLoginNav.textContent = '👋 Hai, ' + savedUser.nama;
           btnLoginNav.href = 'dashboard-wali.html';
@@ -337,7 +363,23 @@ function cekLoginNav() {
           btnLoginNavMobile.textContent = '👋 Hai, ' + savedUser.nama;
           btnLoginNavMobile.href = 'dashboard-wali.html';
         }
+        
+        // ✅ CTA berubah jadi "Daftar Les"
+        if (btnCta) {
+          btnCta.textContent = '📝 Daftar Les';
+          btnCta.href = 'daftar.html';
+        }
+        if (ctaJudul) {
+          ctaJudul.textContent = 'Siap Mendaftarkan Ananda?';
+        }
+        if (ctaSub) {
+          ctaSub.textContent = 'Klik tombol di bawah untuk memilih jadwal dan mendaftar les';
+        }
+        
       } else if (savedUser.role === 'admin') {
+        // ==== ADMIN SUDAH LOGIN ====
+        
+        // Navbar
         if (btnLoginNav) {
           btnLoginNav.textContent = '👨‍💼 Admin';
           btnLoginNav.href = 'admin.html';
@@ -346,6 +388,8 @@ function cekLoginNav() {
           btnLoginNavMobile.textContent = '👨‍💼 Admin';
           btnLoginNavMobile.href = 'admin.html';
         }
+        
+        // CTA tetap seperti semula (admin bukan wali, tidak daftar les)
       }
     }
   } catch(e){}
@@ -383,7 +427,7 @@ function updateJudulPaket() {
   const info = PAKET_INFO[paketAktif];
   document.getElementById('judulPaket').textContent = 'Paket ' + paketAktif;
   document.getElementById('infoPaket').innerHTML = 
-    '<b>' + info.label + '</b> • Rp ' + info.tarif.toLocaleString('id-ID') + '/bulan';
+    '<b>' + info.label + '</b>;
 }
 
 // ===== RENDER JADWAL =====
