@@ -586,7 +586,7 @@ function renderRiwayat(data) {
   } else {
     cs.innerHTML = '<div class="santri-grid">' + santriAktifList.map(d => `
       <div class="santri-card">
-        <h4>👦 ${escapeHtml(d.namaSantri)}</h4>
+        <h4>${escapeHtml(d.namaSantri)}</h4>
         <div class="detail-row">
           <span class="label">Mapel</span>
           <span class="val">${escapeHtml(d.mapel || '-')}</span>
@@ -613,7 +613,7 @@ function renderRiwayat(data) {
     } else if (d.status === 'Menunggu Konfirmasi') {
       actions = `<span class="btn-sm outline">⏳ Menunggu verifikasi admin</span>`;
     } else if (d.status === 'Terdaftar') {
-      actions = `<span class="btn-sm outline">🎉 Selamat belajar!</span>`;
+      actions = `<span class="btn-sm outline">Selamat belajar!</span>`;
     } else if (d.status === 'Batal' && d.catatanAdmin) {
       actions = `<span class="btn-sm danger">Alasan: ${escapeHtml(d.catatanAdmin)}</span>`;
     } else if (d.status === 'Kedaluwarsa') {
@@ -623,7 +623,7 @@ function renderRiwayat(data) {
     <div class="riwayat-item">
       <div class="riwayat-head">
         <div>
-          <h4>👦 ${escapeHtml(d.namaSantri)}</h4>
+          <h4>${escapeHtml(d.namaSantri)}</h4>
           <div class="kode">Kode: ${d.kode}</div>
         </div>
         <span class="badge ${badge}">${escapeHtml(d.status)}</span>
