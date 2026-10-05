@@ -224,7 +224,6 @@ footer p{opacity:.8;margin:4px 0;font-size:12px;}
 
   <!-- ✅ Petunjuk di atas tab paket -->
   <div class="petunjuk-paket">
-    <span class="icon">👆</span>
     <span>Klik paket untuk melihat ketersediaan jadwal les setiap paket</span>
   </div>
 
@@ -310,7 +309,7 @@ const SESI_LIST = [
   'Maghrib - Isya','19:30 - 20:15','20:15 - 21:00','21:00 - 21:45','21:45 - 22:30'
 ];
 const MAX_SLOT = 2;
-const REFRESH_INTERVAL = 30000;
+const REFRESH_INTERVAL = 10000;
 
 let jadwalData = {};
 let paketAktif = 'A';
@@ -427,7 +426,7 @@ function updateJudulPaket() {
   const info = PAKET_INFO[paketAktif];
   document.getElementById('judulPaket').textContent = 'Paket ' + paketAktif;
   document.getElementById('infoPaket').innerHTML = 
-    '<b>' + info.label + '</b>;
+    '<b>' + info.label + '</b>';
 }
 
 // ===== RENDER JADWAL =====
