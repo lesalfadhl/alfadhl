@@ -210,6 +210,7 @@ footer p{opacity:.8;margin:4px 0;font-size:12px;}
   </div>
 
   <div class="tab-paket" id="tabPaket">
+        <p>Klik Paket untuk melihat ketersediaan jadwal setiap paket</p>
     <button data-paket="A" class="active">
       Paket A
       <span class="tab-sub">Ahad - Kamis</span>
@@ -232,7 +233,7 @@ footer p{opacity:.8;margin:4px 0;font-size:12px;}
     <div class="jadwal-header">
       <div>
         <h2 id="judulPaket">Paket A</h2>
-        <div class="info" id="infoPaket">Ahad - Kamis • Rp 300.000/bulan</div>
+        <div class="info" id="infoPaket">Ahad - Kamis</div>
       </div>
       <div class="live-badge">
         <span class="dot"></span>
@@ -278,10 +279,10 @@ footer p{opacity:.8;margin:4px 0;font-size:12px;}
 const API_URL = 'https://script.google.com/macros/s/AKfycbw2mayxghhXc8SX-AleROrdny8Yh75sKRol1lWbnrzVSaJ2B_yy1BAbqDzNHWc8xUoT/exec';
 
 const PAKET_INFO = {
-  A: { hari:['Ahad','Senin','Selasa','Rabu','Kamis'], tarif:300000, label:'Ahad - Kamis' },
-  B: { hari:['Senin','Selasa','Rabu'],                 tarif:175000, label:'Senin - Rabu' },
-  C: { hari:['Jumat','Sabtu'],                         tarif:300000, label:"Jum'at & Sabtu" },
-  D: { hari:['Ahad','Kamis'],                          tarif:125000, label:'Ahad & Kamis' }
+  A: { hari:['Ahad','Senin','Selasa','Rabu','Kamis'], label:'Ahad - Kamis' },
+  B: { hari:['Senin','Selasa','Rabu'],                label:'Senin - Rabu' },
+  C: { hari:['Jumat','Sabtu'],                        label:"Jum'at & Sabtu" },
+  D: { hari:['Ahad','Kamis'],                         label:'Ahad & Kamis' }
 };
 
 const SESI_LIST = [
