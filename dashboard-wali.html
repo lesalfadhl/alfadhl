@@ -331,7 +331,7 @@ td.slot-pair{padding:4px !important;}
       <span><span class="dot-sq d-kosong"></span> Kosong</span>
       <span><span class="dot-sq d-sebagian"></span> Terisi (1 santri)</span>
       <span><span class="dot-sq d-penuh"></span> Penuh (2 santri)</span>
-      <span><span class="dot-sq d-anak"></span> ✨ Anak Anda</span>
+      <span><span class="dot-sq d-anak"></span> Anak Anda</span>
     </div>
   </div>
 
@@ -535,7 +535,7 @@ function renderJadwal() {
           
           if (isAnakSendiri) {
             slot.classList.add('anak-sendiri');
-            slot.textContent = '✨ ' + nama;
+            slot.textContent = '' + nama;
             slot.title = 'Ini anak Anda: ' + nama;
           } else {
             slot.classList.add(terisi >= MAX_SLOT ? 'penuh' : 'terisi');
