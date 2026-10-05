@@ -632,7 +632,7 @@ function renderRiwayat(data) {
         <div class="it"><span>Mapel</span><b>${escapeHtml(d.mapel || '-')}</b></div>
         <div class="it"><span>Paket</span><b>${escapeHtml(d.paket || '-')}</b></div>
         <div class="it"><span>Sesi</span><b>${escapeHtml(d.sesi || '-')}</b></div>
-        <div class="it"><span>Total</span><b>Rp ${Number(d.jumlah || 0).toLocaleString('id-ID')}</b></div>
+        <div class="it"><span>Kontribusi Bulanan</span><b>Rp ${Number(d.jumlah || 0).toLocaleString('id-ID')}</b></div>
       </div>
       ${actions ? `<div class="riwayat-actions">${actions}</div>` : ''}
     </div>`;
